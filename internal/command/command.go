@@ -22,4 +22,5 @@ const (
 	CommandUnarchive       string = "unarchive"
 	CommandUpdate          string = "update"
 	CommandWorkspace       string = "workspace"
+	CommandWorkspaces      string = "workspaces"
 )

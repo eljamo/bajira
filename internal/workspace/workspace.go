@@ -32,7 +32,7 @@ func checkIfStringIsEmpty(str string) bool {
 
 var workspaceNameAndKeyFormGroup = huh.NewGroup(
 	huh.NewInput().
-		Title("Workspace Name").
+		Title("Name").
 		Value(&CreateWorkspaceName).
 		Validate(func(str string) error {
 			if checkIfStringIsEmpty(str) {
@@ -41,7 +41,7 @@ var workspaceNameAndKeyFormGroup = huh.NewGroup(
 			return nil
 		}),
 	huh.NewInput().
-		Title("Workspace Key").
+		Title("Key").
 		Description(`Key for the workspace, if not provided a key will be generated from the name. 
 If provided, the key will be formatted to be all uppercase and remove any special characters.
 		`).
@@ -113,6 +113,7 @@ func generateUniqueKey(name string, usedWorkspaceKeys []string) string {
 	return keyStr
 }
 
+// gets all workspace data from the workspace config files and it's path.
 func getAllWorkspacesData() ([][]string, error) {
 	allDirs, err := file.GetAllWorkspaceDirectories()
 	if err != nil {

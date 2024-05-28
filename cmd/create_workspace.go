@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/flag"
 	"github.com/eljamo/bajira/internal/workspace"
 	"github.com/spf13/cobra"
@@ -14,7 +15,7 @@ var (
 )
 
 var createWorkspaceCmd = &cobra.Command{
-	Use:          "create",
+	Use:          command.CommandWorkspace,
 	Short:        "Create a new workspace",
 	Long:         `Create a new workspace with specified parameters.`,
 	SilenceUsage: true,
