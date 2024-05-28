@@ -2,24 +2,24 @@
 
 A bug tracker, issue tracker, and project management tool written in Go. You have Workspaces, which have Boards, which have Tasks, and Tasks can have Subtasks. All data for Workspaces, Boards, Tasks and Subtasks will be stored in TOML files in some way. Tasks and Subtaks might use Markdown files. The plan is to make this distributed via `git`. If the workspace detects it is or within a `git` directory, support for `fetch`, `pull`, `commit`, and `push` will be enabled.
 
-## Example of a Bajira Folder
+## Example of a Bajira folder
 
 ```
 .
-└── workspaces/
-    ├── work/
-    │   ├── .git
+└── workspace/
+    ├── WORK/
+    │   ├── .git/
     │   ├── config.toml
-    │   └── boards/
+    │   └── board/
     │       ├── config.toml
     │       ├── DEV/
     │       │   ├── config.toml
-    │       │   └── tasks/
+    │       │   └── task/
     │       │       ├── config.toml
     │       │       ├── 1/
     │       │       │   ├── config.toml
     │       │       │   ├── description.md
-    │       │       │   └── subtasks/
+    │       │       │   └── subtask/
     │       │       │       └── 1/
     │       │       │           ├── config.toml
     │       │       │           └── description.md
@@ -28,7 +28,7 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
     │       │           └── description.md
     │       └── PRODUCT/
     │           ├── config.toml
-    │           └── tickets/
+    │           └── task/
     │               ├── config.toml
     │               ├── 1/
     │               │   ├── config.toml
@@ -39,10 +39,10 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
     │               └── 3/
     │                   ├── config.toml
     │                   └── description.md
-    └── personal/
-        ├── .git
+    └── PERSONAL/
+        ├── .git/
         ├── config.toml
-        └── boards/
+        └── board/
             ├── config.toml
             └── PROJECT1/
                 └── ...

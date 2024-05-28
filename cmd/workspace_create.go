@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/eljamo/bajira/internal/flag"
-	"github.com/eljamo/bajira/internal/form"
 	"github.com/eljamo/bajira/internal/workspace"
 	"github.com/spf13/cobra"
 )
@@ -31,13 +30,13 @@ var createWorkspaceCmd = &cobra.Command{
 
 func parseInput() error {
 	if workspaceName == "" {
-		err := form.CreateWorkspaceForm.Run()
+		err := workspace.CreateWorkspaceForm.Run()
 		if err != nil {
 			return fmt.Errorf("failed to run form: %w", err)
 		}
 
-		workspaceName = form.CreateWorkspaceName
-		workspaceKey = form.CreateWorkspaceKey
+		workspaceName = workspace.CreateWorkspaceName
+		workspaceKey = workspace.CreateWorkspaceKey
 	}
 
 	return nil

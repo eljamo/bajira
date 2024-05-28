@@ -7,9 +7,9 @@ import (
 
 var maxKeyLength = 10
 
-// GenerateJIRAKey generates a JIRA project key from the given input string.
-// It normalizes the input by removing non-alphabetic characters, converting to uppercase,
-// and truncating to a maximum of 10 characters.
+// GenerateKey generates a project key from the given input string. It normalizes
+// the input by removing non-alphabetic characters, converting to uppercase, and
+// truncating to a maximum of 10 characters.
 func GenerateKey(input string) string {
 	// Define a regular expression to match non-alphabetic characters
 	re := regexp.MustCompile("[^a-zA-Z]")
