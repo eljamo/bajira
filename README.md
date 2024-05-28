@@ -71,8 +71,18 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 - bajira create task
   - bajira create task --workspace_key --board_key
   - bajira create task --workspace_key --board_key --task_number
-- bajira delete task --workspace_key --board_key --task_number
-- bajira update task --workspace_key --board_key --task_number
+- bajira delete task
+  - bajira delete task --workspace_key --board_key --task_number
+  - bajira delete task --workspace_key --board_key --task_number --subtask_number
+- bajira update task
+  - bajira update task --workspace_key --board_key --task_number
+  - bajira update task --workspace_key --board_key --task_number --subtask_number
+- bajira archive task
+  - bajira archive task --workspace_key --board_key --task_number
+  - bajira archive task --workspace_key --board_key --task_number --subtask_number
+- bajira unarchive task
+  - bajira unarchive task --workspace_key --board_key --task_number
+  - bajira unarchive task --workspace_key --board_key --task_number --subtask_number
 - bajira assign task
   - bajira assign task --workspace_key --board_key --task_number --to_self
   - bajira assign task --workspace_key --board_key --task_number --subtask_number --to_self
