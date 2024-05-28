@@ -68,18 +68,11 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 ### Task Commands
 
-- bajira create task --workspace_key --board_key
+- bajira create task
+  - bajira create task --workspace_key --board_key
+  - bajira create task --workspace_key --board_key --task_number
 - bajira delete task --workspace_key --board_key --task_number
 - bajira update task --workspace_key --board_key --task_number
-
-### Subtask Commands
-
-- bajira create subtask --workspace_key --board_key --task_number
-- bajira delete subtask --workspace_key --board_key --task_number --subtask_number
-- bajira update subtask --workspace_key --board_key --task_number --subtask_number
-
-### Task & Subtask Commands
-
 - bajira assign task
   - bajira assign task --workspace_key --board_key --task_number --to_self
   - bajira assign task --workspace_key --board_key --task_number --subtask_number --to_self
@@ -93,6 +86,9 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
   - bajira move task --workspace_key --from_board_key --to_board_key --task_number --subtask_number
   - bajira move task --workspace_key --from_board_key --to_board_key --task_number --to_task_number
   - bajira move task --workspace_key --from_board_key --to_board_key --task_number --subtask_number --to_task_number
+- bajira flag task
+  - bajira flag task --workspace_key --from_board_key --to_board_key --task_number
+  - bajira flag task --workspace_key --from_board_key --to_board_key --task_number --subtask_number
 
 ### List Commands
 
