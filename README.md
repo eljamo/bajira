@@ -113,7 +113,7 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
   - bajira timer task start --workspace_key --board_key --task_number --subtask_number
   - bajira timer task start --workspace_key --board_key --task_number --pomodoro
   - bajira timer task start --workspace_key --board_key --task_number --5217
-- bajira stopwatch stop
+- bajira timer stop
 
 ### Config Commands
 
