@@ -119,7 +119,7 @@ func getAllWorkspacesData() ([][]string, error) {
 		return nil, err
 	}
 
-	var keysNamesPaths [][]string
+	keysNamesPaths := make([][]string, 0)
 	for _, dir := range allDirs {
 		configPath := filepath.Join(dir, config.BajiraFileNameConfig)
 		var wsConfig WorkspaceConfig

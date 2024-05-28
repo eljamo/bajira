@@ -6,18 +6,19 @@ import (
 	"github.com/eljamo/bajira/internal/styles"
 )
 
-var widthPadding = 8
+var colWidthPadding = 2
 
 func Generate(headers []string, rows [][]string) *table.Table {
 	// Calculate column widths
 	colWidth := make([]int, len(headers))
 	for i, header := range headers {
-		colWidth[i] = len(header) + widthPadding
+		colWidth[i] = len(header) + colWidthPadding
 	}
 	for _, row := range rows {
 		for i, cell := range row {
-			if len(cell) > colWidth[i] {
-				colWidth[i] = len(cell) + widthPadding
+			val := len(cell) + colWidthPadding
+			if val > colWidth[i] {
+				colWidth[i] = len(cell) + colWidthPadding
 			}
 		}
 	}
