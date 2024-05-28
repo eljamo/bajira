@@ -6,8 +6,10 @@ import (
 	"github.com/eljamo/bajira/internal/styles"
 )
 
-var characterPadding = 2
-var cellStyleWidth = 6
+var (
+	characterPadding = 2
+	cellStyleWidth   = 6
+)
 
 var (
 	HeaderStyle  = styles.Renderer.NewStyle().Foreground(styles.Green).Bold(true).Align(lipgloss.Center)
