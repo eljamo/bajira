@@ -97,6 +97,8 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 - bajira list tasks
   - bajira list tasks --workspace_key --board_key --assignee
   - bajira list tasks --workspace_key --board_key --self
+  - bajira list tasks --workspace_key --assignee
+  - bajira list tasks --workspace_key --self
 
 ### Kanban Commands
 
