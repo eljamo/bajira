@@ -6,18 +6,27 @@ import (
 	"github.com/eljamo/bajira/internal/styles"
 )
 
-var colWidthPadding = 2
+var characterPadding = 2
+var cellStyleWidth = 6
+
+var (
+	HeaderStyle  = styles.Renderer.NewStyle().Foreground(styles.Green).Bold(true).Align(lipgloss.Center)
+	CellStyle    = styles.Renderer.NewStyle().Padding(0, 1).Width(cellStyleWidth)
+	OddRowStyle  = CellStyle.Foreground(styles.White)
+	EvenRowStyle = CellStyle.Foreground(styles.LightGray)
+	BorderStyle  = lipgloss.NewStyle().Foreground(styles.Green)
+)
 
 func getColWidths(headers []string, rows [][]string) []int {
 	colWidth := make([]int, len(headers))
 	for i, header := range headers {
-		colWidth[i] = len(header) + colWidthPadding
+		colWidth[i] = len(header) + characterPadding
 	}
 	for _, row := range rows {
 		for i, cell := range row {
-			val := len(cell) + colWidthPadding
+			val := len(cell) + characterPadding
 			if val > colWidth[i] {
-				colWidth[i] = len(cell) + colWidthPadding
+				colWidth[i] = len(cell) + characterPadding
 			}
 		}
 	}
@@ -33,17 +42,17 @@ func Generate(headers []string, rows [][]string) *table.Table {
 
 	t := table.New().
 		Border(lipgloss.ThickBorder()).
-		BorderStyle(styles.BorderStyle).
+		BorderStyle(BorderStyle).
 		StyleFunc(func(row, col int) lipgloss.Style {
 			var style lipgloss.Style
 
 			switch {
 			case row == 0:
-				return styles.HeaderStyle
+				return HeaderStyle
 			case row%2 == 0:
-				style = styles.EvenRowStyle
+				style = EvenRowStyle
 			default:
-				style = styles.OddRowStyle
+				style = OddRowStyle
 			}
 
 			for i, width := range colWidth {
