@@ -110,11 +110,11 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 ### Timer Commands
 
-- bajira timer task start
-  - bajira timer task start --workspace_key --board_key --task_number
-  - bajira timer task start --workspace_key --board_key --task_number --subtask_number
-  - bajira timer task start --workspace_key --board_key --task_number --pomodoro
-  - bajira timer task start --workspace_key --board_key --task_number --5217
+- bajira timer start task
+  - bajira timer start task --workspace_key --board_key --task_number
+  - bajira timer start task --workspace_key --board_key --task_number --subtask_number
+  - bajira timer start task --workspace_key --board_key --task_number --pomodoro
+  - bajira timer start task --workspace_key --board_key --task_number --5217
 - bajira timer stop
 
 ### Config Commands
