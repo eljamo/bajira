@@ -8,8 +8,7 @@ import (
 
 var colWidthPadding = 2
 
-func Generate(headers []string, rows [][]string) *table.Table {
-	// Calculate column widths
+func getColWidths(headers []string, rows [][]string) []int {
 	colWidth := make([]int, len(headers))
 	for i, header := range headers {
 		colWidth[i] = len(header) + colWidthPadding
@@ -22,6 +21,15 @@ func Generate(headers []string, rows [][]string) *table.Table {
 			}
 		}
 	}
+	return colWidth
+}
+
+func Generate(headers []string, rows [][]string) *table.Table {
+	if len(headers) == 0 || len(rows) == 0 {
+		return nil
+	}
+
+	colWidth := getColWidths(headers, rows)
 
 	t := table.New().
 		Border(lipgloss.ThickBorder()).

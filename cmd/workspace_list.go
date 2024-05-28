@@ -15,6 +15,11 @@ var listWorkspaceCmd = &cobra.Command{
 			return err
 		}
 
+		if table == nil {
+			cmd.Println("No workspaces found")
+			return nil
+		}
+
 		cmd.Println(table)
 
 		return nil
