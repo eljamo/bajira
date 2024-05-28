@@ -8,7 +8,7 @@ import (
 
 const (
 	White     = lipgloss.Color("255")
-	LightGray = lipgloss.Color("245")
+	LightGray = lipgloss.Color("248")
 	Green     = lipgloss.Color("70")
 )
 
@@ -22,9 +22,9 @@ var (
 	// CellStyle is the base lipgloss style used for the table rows.
 	CellStyle = Renderer.NewStyle().Padding(0, 1).Width(cellStyleWidth)
 	// OddRowStyle is the lipgloss style used for odd-numbered table rows.
-	OddRowStyle = CellStyle.Foreground(LightGray)
+	OddRowStyle = CellStyle.Foreground(White)
 	// EvenRowStyle is the lipgloss style used for even-numbered table rows.
-	EvenRowStyle = CellStyle.Foreground(White)
+	EvenRowStyle = CellStyle.Foreground(LightGray)
 	// BorderStyle is the lipgloss style used for the table border.
 	BorderStyle = lipgloss.NewStyle().Foreground(Green)
 )
