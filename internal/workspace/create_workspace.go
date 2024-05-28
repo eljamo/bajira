@@ -1,10 +1,8 @@
 package workspace
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
-	"strings"
 
 	"github.com/charmbracelet/huh"
 	"github.com/eljamo/bajira/internal/config"
@@ -12,35 +10,8 @@ import (
 	"github.com/eljamo/bajira/internal/toml"
 )
 
-var (
-	CreateWorkspaceName string
-	CreateWorkspaceKey  string
-)
-
-func checkIfStringIsEmpty(str string) bool {
-	return len(strings.TrimSpace(str)) == 0
-}
-
 // CreateWorkspaceForm is a form for creating a new workspace. Used if no arguments are provided.
-var CreateWorkspaceForm = huh.NewForm(
-	huh.NewGroup(
-		huh.NewInput().
-			Title("Workspace Name").
-			Value(&CreateWorkspaceName).
-			Validate(func(str string) error {
-				if checkIfStringIsEmpty(str) {
-					return errors.New("name cannot be empty")
-				}
-				return nil
-			}),
-		huh.NewInput().
-			Title("Workspace Key").
-			Description(`Key for the workspace, if not provided a key will be generated from the name. 
-If provided, the key will be formatted to be all uppercase and remove any special characters.
-			`).
-			Value(&CreateWorkspaceKey),
-	),
-)
+var CreateWorkspaceForm = huh.NewForm(workspaceNameAndKeyFormGroup)
 
 // CreateWorkspace creates a new workspace with the given name in the data directory.
 // If the workspace already exists, a directory with a name appended with a number will be created.
