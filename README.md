@@ -79,8 +79,10 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
   - bajira assign task --workspace_key --board_key --task_number --assingee
   - bajira assign task --workspace_key --board_key --task_number --subtask_number --assignee
 - bajira unassign task
-  - bajira unassign task --workspace_key --board_key --task_number
-  - bajira unassign task --workspace_key --board_key --task_number --subtask_number
+  - bajira unassign task --workspace_key --board_key --task_number --self
+  - bajira unassign task --workspace_key --board_key --task_number --subtask_number --self
+  - bajira unassign task --workspace_key --board_key --task_number --assignee
+  - bajira unassign task --workspace_key --board_key --task_number --subtask_number --assignee
 - bajira move task
   - bajira move task --workspace_key --from_board_key --to_board_key --task_number
   - bajira move task --workspace_key --from_board_key --to_board_key --task_number --subtask_number
@@ -90,6 +92,16 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
   - bajira flag task --workspace_key --from_board_key --to_board_key --task_number
   - bajira flag task --workspace_key --from_board_key --to_board_key --task_number --subtask_number
 
+#### Other Task Commands
+
+I'll probably add support for these kinds of attributes on tasks
+
+- Blocking/Blocked by
+- Depended on by/Depends on
+- Tests/Tested by
+- Relates to
+- Watched by
+
 ### List Commands
 
 - bajira list workspaces
@@ -97,16 +109,20 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 - bajira list tasks
   - bajira list tasks --workspace_key --board_key --assignee
   - bajira list tasks --workspace_key --board_key --self
+  - bajira list tasks --workspace_key --board_key --flagged
   - bajira list tasks --workspace_key --assignee
   - bajira list tasks --workspace_key --self
+  - bajira list tasks --workspace_key --flagged
 
 ### Kanban Commands
 
 - bajira kanban
   - bajira kanban --workspace_key --board_key --assignee
   - bajira kanban --workspace_key --board_key --self
+  - bajira kanban --workspace_key --board_key --flagged
   - bajira kanban --workspace_key --assignee
   - bajira kanban --workspace_key --self
+  - bajira kanban --workspace_key --flagged
 
 ### Timer Commands
 
