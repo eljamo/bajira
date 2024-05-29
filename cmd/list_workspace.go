@@ -8,8 +8,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var all bool
-var archived bool
+var (
+	all      bool
+	archived bool
+)
 
 var listWorkspacesCmd = &cobra.Command{
 	Use:   command.CommandWorkspaces,
