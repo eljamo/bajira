@@ -2,10 +2,11 @@ package workspace
 
 import (
 	"github.com/charmbracelet/lipgloss/table"
+	"github.com/eljamo/bajira/internal/strings"
 	bajiraTable "github.com/eljamo/bajira/internal/table"
 )
 
-var WorkspaceListHeaders = []string{"Key", "Name", "Path", "Archived"}
+var WorkspaceListHeaders = []string{strings.KeyUpper, strings.NameUpper, strings.PathUpper, strings.ArchivedUpper}
 
 func GenerateWorkspaceList() (*table.Table, error) {
 	data, err := getAllWorkspacesData()

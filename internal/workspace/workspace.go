@@ -11,6 +11,7 @@ import (
 	"github.com/eljamo/bajira/internal/config"
 	"github.com/eljamo/bajira/internal/file"
 	"github.com/eljamo/bajira/internal/key"
+	bajiraStrings "github.com/eljamo/bajira/internal/strings"
 	"github.com/eljamo/bajira/internal/toml"
 )
 
@@ -129,9 +130,9 @@ func getAllWorkspacesData() ([][]string, error) {
 			return nil, fmt.Errorf("failed to decode workspace config file: %w", err)
 		}
 
-		archivedStr := "No"
+		archivedStr := bajiraStrings.NoCapitalized
 		if wsConfig.Archived {
-			archivedStr = "Yes"
+			archivedStr = bajiraStrings.YesCapitalized
 		}
 
 		keysNamesPaths = append(keysNamesPaths, []string{wsConfig.Key, wsConfig.Name, dir, archivedStr})

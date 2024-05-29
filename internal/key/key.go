@@ -11,8 +11,7 @@ var maxKeyLength = 10
 // the input by removing non-alphabetic characters, converting to uppercase, and
 // truncating to a maximum of 10 characters.
 func GenerateKey(input string) string {
-	// Define a regular expression to match non-alphabetic characters
-	re := regexp.MustCompile("[^a-zA-Z]")
+	re := regexp.MustCompile(`[^\p{L}\p{N}]`)
 
 	// Remove non-alphabetic characters
 	cleaned := re.ReplaceAllString(input, "")
