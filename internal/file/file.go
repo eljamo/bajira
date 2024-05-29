@@ -1,6 +1,7 @@
 package file
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -19,7 +20,7 @@ func GetBajiraConfigFilePath() (string, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		file, err := os.Create(path)
 		if err != nil {
-			return "", err
+			return "", fmt.Errorf("failed to create file: %w", err)
 		}
 		defer func() {
 			if err := file.Close(); err != nil {
