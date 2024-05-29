@@ -115,14 +115,21 @@ I'll probably add support for these kinds of attributes on tasks
 ### List Commands
 
 - bajira list workspaces
-- bajira list boards --workspace_key
+  - bajira list workspaces --all
+  - bajira list workspaces --archived
+- bajira list boards
+  - bajira list boards --workspace_key
+  - bajira list boards --workspace_key --all
+  - bajira list boards --workspace_key --archived
 - bajira list tasks
   - bajira list tasks --workspace_key --board_key --assignee
   - bajira list tasks --workspace_key --board_key --self
   - bajira list tasks --workspace_key --board_key --flagged
+  - bajira list tasks --workspace_key --board_key --archived
   - bajira list tasks --workspace_key --assignee
   - bajira list tasks --workspace_key --self
   - bajira list tasks --workspace_key --flagged
+  - bajira list tasks --workspace_key --archived
 
 ### Kanban Commands
 
@@ -161,6 +168,6 @@ I'll probably add support for these kinds of attributes on tasks
 
 ### Set Commands
 
-This will allow you to set the current workspace so for other commands which have a --workspace_key flag like board, task, list, kanban, timer, and assignee. You can leave it out and it'll using the currently set workspace
+This will allow you to set the current workspace so for other commands which have a --workspace_key flag like board, task, list, kanban, timer, and assignee. You can leave it out and it'll use the currently set workspace
 
 - bajira set workspace --workspace_key
