@@ -1,7 +1,6 @@
 package workspace
 
 import (
-	"errors"
 	"fmt"
 	"path/filepath"
 	"slices"
@@ -9,6 +8,7 @@ import (
 
 	"github.com/charmbracelet/huh"
 	"github.com/eljamo/bajira/internal/config"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/file"
 	"github.com/eljamo/bajira/internal/key"
 	bajiraStrings "github.com/eljamo/bajira/internal/strings"
@@ -33,23 +33,21 @@ func checkIfStringIsEmpty(str string) bool {
 
 var workspaceNameAndKeyFormGroup = huh.NewGroup(
 	huh.NewInput().
-		Title("Name").
+		Title(bajiraStrings.NameUpper).
 		Value(&CreateWorkspaceName).
 		Validate(func(str string) error {
 			if checkIfStringIsEmpty(str) {
-				return errors.New("name cannot be empty")
+				return errorconc.LocalizedError(nil, "name cannot be empty")
 			}
 			return nil
 		}),
 	huh.NewInput().
-		Title("Key").
-		Description(`Key for the workspace, if not provided a key will be generated from the name. 
-If provided, the key will be formatted to be all uppercase and remove any special characters.
-		`).
+		Title(bajiraStrings.KeyUpper).
+		Description(bajiraStrings.WorkspaceKeyDescription).
 		Value(&CreateWorkspaceKey).
 		Validate(func(str string) error {
 			if len(str) >= 1 && checkIfStringIsEmpty(str) {
-				return errors.New("key cannot be empty")
+				return errorconc.LocalizedError(nil, "key cannot be empty")
 			}
 			return nil
 		}),
@@ -73,7 +71,7 @@ func getUsedWorkspaceKeys() ([]string, error) {
 		var wsConfig WorkspaceConfig
 		err := toml.DecodeFromFile(configPath, &wsConfig)
 		if err != nil {
-			return nil, fmt.Errorf("failed to decode workspace config file: %w", err)
+			return nil, errorconc.LocalizedError(err, "failed to decode workspace config file")
 		}
 
 		keys = append(keys, wsConfig.Key)
@@ -86,13 +84,13 @@ func getUsedWorkspaceKeys() ([]string, error) {
 func generateWorkspaceKey(name, customKey string) (string, error) {
 	usedWorkspaceKeys, err := getUsedWorkspaceKeys()
 	if err != nil {
-		return "", fmt.Errorf("failed to get used workspace keys: %w", err)
+		return "", errorconc.LocalizedError(err, "failed to get used workspace keys")
 	}
 
 	if customKey != "" && !checkIfStringIsEmpty(customKey) {
 		customKey = key.GenerateKey(customKey)
 		if slices.Contains(usedWorkspaceKeys, customKey) {
-			return "", fmt.Errorf("workspace key %s already exists", customKey)
+			return "", errorconc.LocalizedError(nil, "workspace key already exists", customKey)
 		}
 		return customKey, nil
 	}
@@ -127,7 +125,7 @@ func getAllWorkspacesData() ([][]string, error) {
 		var wsConfig WorkspaceConfig
 		err := toml.DecodeFromFile(configPath, &wsConfig)
 		if err != nil {
-			return nil, fmt.Errorf("failed to decode workspace config file: %w", err)
+			return nil, errorconc.LocalizedError(err, "failed to decode workspace config file")
 		}
 
 		archivedStr := bajiraStrings.NoCapitalized

@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/eljamo/bajira/internal/command"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/flag"
+	"github.com/eljamo/bajira/internal/strings"
 	"github.com/eljamo/bajira/internal/workspace"
 	"github.com/spf13/cobra"
 )
@@ -16,8 +16,7 @@ var (
 
 var createWorkspaceCmd = &cobra.Command{
 	Use:          command.CommandWorkspace,
-	Short:        "Create a new workspace",
-	Long:         `Create a new workspace with specified parameters.`,
+	Short:        strings.CreateWorkspaceDescription,
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		err := parseInput()
@@ -33,7 +32,7 @@ func parseInput() error {
 	if workspaceName == "" {
 		err := workspace.CreateWorkspaceForm.Run()
 		if err != nil {
-			return fmt.Errorf("failed to run form: %w", err)
+			return errorconc.LocalizedError(err, "failed to run form")
 		}
 
 		workspaceName = workspace.CreateWorkspaceName
@@ -57,16 +56,16 @@ func createWorkspace(cmd *cobra.Command) error {
 func init() {
 	createWorkspaceCmd.Flags().StringVarP(
 		&workspaceKey,
-		flag.FlagKey,
+		flag.FlagWorkspaceKey,
 		flag.FlagK,
 		"",
-		"Custom key for the workspace, if not provided a key will be generated from the name. If provided, the key will be formatted.",
+		strings.WorkspaceKeyDescription,
 	)
 	createWorkspaceCmd.Flags().StringVarP(
 		&workspaceName,
-		flag.FlagName,
+		flag.FlagWorkspaceName,
 		flag.FlagN,
 		"",
-		"Name of the workspace",
+		strings.WorkspaceNameDescription,
 	)
 }

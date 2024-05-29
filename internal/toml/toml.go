@@ -1,18 +1,18 @@
 package toml
 
 import (
-	"fmt"
 	"log"
 	"os"
 
 	"github.com/BurntSushi/toml"
+	"github.com/eljamo/bajira/internal/errorconc"
 )
 
 // encodeToFile encodes the given struct into a .toml file
 func EncodeToFile[T any](data T, path string) error {
 	file, err := os.Create(path)
 	if err != nil {
-		return fmt.Errorf("failed to create file: %w", err)
+		return errorconc.LocalizedError(err, "failed to create file")
 	}
 	defer func() {
 		if err := file.Close(); err != nil {
@@ -22,7 +22,7 @@ func EncodeToFile[T any](data T, path string) error {
 
 	encoder := toml.NewEncoder(file)
 	if err := encoder.Encode(data); err != nil {
-		return fmt.Errorf("failed to encode data: %w", err)
+		return errorconc.LocalizedError(err, "failed to encode data")
 	}
 
 	return nil
@@ -31,7 +31,7 @@ func EncodeToFile[T any](data T, path string) error {
 // DecodeFromFile decodes the .toml file into the given struct
 func DecodeFromFile[T any](path string, result *T) error {
 	if _, err := toml.DecodeFile(path, result); err != nil {
-		return fmt.Errorf("failed to decode file: %w", err)
+		return errorconc.LocalizedError(err, "failed to decode file")
 	}
 
 	return nil

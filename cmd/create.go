@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"github.com/eljamo/bajira/internal/command"
+	"github.com/eljamo/bajira/internal/strings"
 	"github.com/spf13/cobra"
 )
 
 var createCmd = &cobra.Command{
 	Use:   command.CommandCreate,
-	Short: "Create a workspace, board, task, or subtask",
+	Short: strings.CreateDescription,
 }
 
 func init() {

@@ -1,7 +1,6 @@
 package file
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,12 +9,8 @@ import (
 	"unicode"
 
 	"github.com/eljamo/bajira/internal/config"
+	"github.com/eljamo/bajira/internal/errorconc"
 	gap "github.com/muesli/go-app-paths"
-)
-
-var (
-	ErrNoDataDirectory   = errors.New("no data directory found")
-	ErrNoConfigDirectory = errors.New("no config directory found")
 )
 
 var scope = gap.NewScope(gap.User, config.BajiraApplicationName)
@@ -36,7 +31,7 @@ func createAllDirectories(path string) error {
 	// Create the directory
 	err := os.MkdirAll(path, dirPermissions)
 	if err != nil {
-		return fmt.Errorf("failed to create directory: %w", err)
+		return errorconc.LocalizedError(err, "failed to create directory")
 	}
 
 	// Return nil if the directory was created successfully
@@ -47,10 +42,11 @@ func createAllDirectories(path string) error {
 func GetDataDirectory() (string, error) {
 	dirs, err := scope.DataDirs()
 	if err != nil {
-		return "", fmt.Errorf("failed to get data directory: %w", err)
+		cerr := errorconc.LocalizedError(err, "failed to get data directory")
+		return "", cerr
 	}
 	if len(dirs) == 0 {
-		return "", ErrNoDataDirectory
+		return "", errorconc.LocalizedError(nil, "no data directory found")
 	}
 
 	err = createAllDirectories(dirs[0])
@@ -65,10 +61,11 @@ func GetDataDirectory() (string, error) {
 func GetConfigDirectory() (string, error) {
 	dirs, err := scope.ConfigDirs()
 	if err != nil {
-		return "", fmt.Errorf("failed to get config directory: %w", err)
+		cerr := errorconc.LocalizedError(err, "failed to get config directory")
+		return "", cerr
 	}
 	if len(dirs) == 0 {
-		return "", ErrNoConfigDirectory
+		return "", errorconc.LocalizedError(nil, "no config directory found")
 	}
 
 	err = createAllDirectories(dirs[0])
@@ -83,7 +80,8 @@ func GetConfigDirectory() (string, error) {
 func GetCacheDirectory() (string, error) {
 	dir, err := scope.CacheDir()
 	if err != nil {
-		return "", fmt.Errorf("failed to get cache directory: %w", err)
+		cerr := errorconc.LocalizedError(err, "failed to get cache directory")
+		return "", cerr
 	}
 
 	err = createAllDirectories(dir)
@@ -112,9 +110,9 @@ func CreateWorkspaceRootDirectory() error {
 
 // SanitizeDirectoryName removes invalid characters from a directory name.
 func sanitizeDirectoryName(input string) string {
-	// Replace invalid characters with an underscore
+	// Replace invalid characters with an empty string
 	re := regexp.MustCompile(`[<>:"/\\|?*\x00-\x1F]`)
-	sanitized := re.ReplaceAllString(input, "")
+	sanitized := re.ReplaceAllString(input, "_")
 
 	// Trim leading and trailing underscores or whitespace
 	sanitized = strings.TrimFunc(sanitized, func(r rune) bool {
@@ -139,7 +137,8 @@ func createSingleDirectory(basePath, dirName, duplicateDirectoryNameFormat strin
 		}
 		if !os.IsExist(err) {
 			// An error other than "directory already exists" occurred
-			return "", fmt.Errorf("failed to create directory: %w", err)
+			cerr := errorconc.LocalizedError(err, "failed to create directory")
+			return "", cerr
 		}
 
 		// Directory already exists, so increment the counter and try a new name
@@ -167,7 +166,8 @@ func getSubdirectoryPaths(path string) ([]string, error) {
 
 	files, err := os.ReadDir(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read directory: %w", err)
+		cerr := errorconc.LocalizedError(err, "failed to read directory")
+		return nil, cerr
 	}
 
 	for _, file := range files {

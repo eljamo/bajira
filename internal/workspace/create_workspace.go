@@ -6,6 +6,7 @@ import (
 
 	"github.com/charmbracelet/huh"
 	"github.com/eljamo/bajira/internal/config"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/file"
 	"github.com/eljamo/bajira/internal/toml"
 )
@@ -28,13 +29,15 @@ func CreateWorkspace(name string, customKey string) (string, error) {
 
 	workspaceDirPath, err := file.CreateWorkspaceDirectory(dataDirPath, workspaceKey)
 	if err != nil {
-		return "", fmt.Errorf("failed to create workspace %s: %w", name, err)
+		cerr := errorconc.LocalizedError(err, "failed to create workspace", name)
+		return "", cerr
 	}
 
 	workspaceConfigFilePath := filepath.Join(workspaceDirPath, config.BajiraFileNameConfig)
 	err = toml.EncodeToFile(&WorkspaceConfig{Key: workspaceKey, Name: name}, workspaceConfigFilePath)
 	if err != nil {
-		return "", fmt.Errorf("failed to create workspace config file: %w", err)
+		cerr := errorconc.LocalizedError(err, "failed to create workspace config file", name)
+		return "", cerr
 	}
 
 	msg := fmt.Sprintf(`Workspace "%s" created at "%s"`, name, workspaceDirPath)

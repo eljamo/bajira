@@ -1,12 +1,12 @@
 package file
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/eljamo/bajira/internal/config"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/toml"
 )
 
@@ -20,7 +20,7 @@ func GetBajiraConfigFilePath() (string, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		file, err := os.Create(path)
 		if err != nil {
-			return "", fmt.Errorf("failed to create file: %w", err)
+			return "", errorconc.LocalizedError(err, "failed to create file")
 		}
 		defer func() {
 			if err := file.Close(); err != nil {

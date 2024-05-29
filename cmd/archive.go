@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"github.com/eljamo/bajira/internal/command"
+	"github.com/eljamo/bajira/internal/strings"
 	"github.com/spf13/cobra"
 )
 
 var archiveCmd = &cobra.Command{
 	Use:   command.CommandArchive,
-	Short: "Archive a workspace or a board",
+	Short: strings.ArchiveDescription,
 }
 
 func init() {

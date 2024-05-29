@@ -7,36 +7,52 @@ import (
 	"github.com/eljamo/bajira/internal/file"
 	"github.com/jeandeaual/go-locale"
 	"github.com/leonelquinteros/gotext"
+	"golang.org/x/text/language"
 )
 
-func guessLocale() {
+func Get() (string, error) {
+	cfg, err := file.GetBajiraConfig()
+	if err != nil {
+		return "", fmt.Errorf("error getting config: %w", err)
+	}
+
+	if cfg != nil && cfg.Locale != "" {
+		return cfg.Locale, nil
+	}
+
 	userLocale, err := locale.GetLocale()
 	if err != nil {
-		// should probably never reach this point
-		fmt.Println("Warning: Error getting user locale: ", err)
+		return "", fmt.Errorf("error guessing user locale: %w", err)
+	}
+
+	return userLocale, nil
+}
+
+func GetLanguageTag() language.Tag {
+	locale, err := Get()
+	if err != nil {
+		return language.English
+	}
+
+	tag, err := language.Parse(locale)
+	if err != nil {
+		return language.English
+	}
+
+	return tag
+}
+
+func Set() error {
+	locale, err := Get()
+	if err != nil {
+		return fmt.Errorf("error getting locale: %w", err)
 	}
 
 	gotext.Configure(
 		config.BajiraPortableObjectDirectoryName,
-		userLocale,
+		locale,
 		config.BajiraPortableObjectFileName,
 	)
-}
 
-func Set() {
-	cfg, err := file.GetBajiraConfig()
-	if err != nil {
-		// should probably never reach this point
-		fmt.Println("Warning: Error getting config: ", err)
-	}
-
-	if cfg != nil && cfg.Locale != "" {
-		gotext.Configure(
-			config.BajiraPortableObjectDirectoryName,
-			cfg.Locale,
-			config.BajiraPortableObjectFileName,
-		)
-	} else {
-		guessLocale()
-	}
+	return nil
 }

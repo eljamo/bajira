@@ -5,12 +5,13 @@ import (
 
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/flag"
+	"github.com/eljamo/bajira/internal/strings"
 	"github.com/spf13/cobra"
 )
 
 var unarchiveWorkspaceCmd = &cobra.Command{
 	Use:   command.CommandWorkspace,
-	Short: "Unarchive a workspace",
+	Short: strings.UnarchiveWorkspaceDescription,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Add logic for unarchiving a workspace here")
 
@@ -21,9 +22,9 @@ var unarchiveWorkspaceCmd = &cobra.Command{
 func init() {
 	unarchiveWorkspaceCmd.Flags().StringVarP(
 		&workspaceKey,
-		flag.FlagKey,
+		flag.FlagWorkspaceKey,
 		flag.FlagK,
 		"",
-		"Key of the workspace to unarchive",
+		strings.WorkspaceKeyDescription,
 	)
 }

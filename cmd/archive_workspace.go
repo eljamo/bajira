@@ -5,12 +5,13 @@ import (
 
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/flag"
+	"github.com/eljamo/bajira/internal/strings"
 	"github.com/spf13/cobra"
 )
 
 var archiveWorkspaceCmd = &cobra.Command{
 	Use:   command.CommandWorkspace,
-	Short: "Archive a workspace",
+	Short: strings.ArchiveWorkspaceDescription,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Add logic for archiving a workspace here")
 
@@ -21,9 +22,9 @@ var archiveWorkspaceCmd = &cobra.Command{
 func init() {
 	archiveWorkspaceCmd.Flags().StringVarP(
 		&workspaceKey,
-		flag.FlagKey,
+		flag.FlagWorkspaceKey,
 		flag.FlagK,
 		"",
-		"Key of the workspace to archive",
+		strings.WorkspaceKeyDescription,
 	)
 }

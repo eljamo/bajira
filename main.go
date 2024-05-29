@@ -11,6 +11,10 @@ import (
 var POFS embed.FS
 
 func main() {
-	locale.Set()
+	err := locale.Set()
+	if err != nil {
+		panic(err)
+	}
+
 	cmd.Execute()
 }
