@@ -1,7 +1,6 @@
 package workspace
 
 import (
-	"fmt"
 	"path/filepath"
 
 	"github.com/charmbracelet/huh"
@@ -9,6 +8,7 @@ import (
 	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/file"
 	"github.com/eljamo/bajira/internal/toml"
+	"github.com/leonelquinteros/gotext"
 )
 
 // CreateWorkspaceForm is a form for creating a new workspace. Used if no arguments are provided.
@@ -40,7 +40,5 @@ func CreateWorkspace(name string, customKey string) (string, error) {
 		return "", cerr
 	}
 
-	msg := fmt.Sprintf(`Workspace "%s" created at "%s"`, name, workspaceDirPath)
-
-	return msg, nil
+	return gotext.Get(`Workspace "%s" created at "%s"`, name, workspaceDirPath), nil
 }
