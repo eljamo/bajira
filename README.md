@@ -145,6 +145,22 @@ I'll probably add support for these kinds of attributes on tasks
 
 ### Config Commands
 
-- bajira config self
-  - bajira config self --global --name
-  - bajira config self --workspace_key --name
+- bajira config
+  - bajira config --data_directory
+  - bajira config --config_directory
+  - bajira config --cache_directory
+  - bajira config --default_workspace_key
+  - bajira config --locale
+
+### Assignee Commands
+
+- bajira assignee
+  - bajira assignee --name
+  - bajira assignee --global --name
+  - bajira assignee --workspace_key --name
+
+### Set Commands
+
+This will allow you to set the current workspace so for other commands which have a --workspace_key flag like board, task, list, kanban, timer, and assignee. You can leave it out and it'll using the currently set workspace
+
+- bajira set workspace --workspace_key
