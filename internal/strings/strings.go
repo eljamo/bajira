@@ -60,4 +60,5 @@ var (
 	UpdateWorkspaceDescription    = gotext.Get("Update a workspace")
 	WorkspaceNameDescription      = gotext.Get("Name of the workspace")
 	WorkspaceKeyDescription       = gotext.Get("Key for the workspace")
+	WorkspaceCreated              = gotext.Get("Workspace created")
 )

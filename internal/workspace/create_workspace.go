@@ -7,8 +7,8 @@ import (
 	"github.com/eljamo/bajira/internal/config"
 	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/file"
+	"github.com/eljamo/bajira/internal/strings"
 	"github.com/eljamo/bajira/internal/toml"
-	"github.com/leonelquinteros/gotext"
 )
 
 // CreateWorkspaceForm is a form for creating a new workspace. Used if no arguments are provided.
@@ -40,5 +40,5 @@ func CreateWorkspace(name string, customKey string) (string, error) {
 		return "", cerr
 	}
 
-	return gotext.Get(`Workspace "%s" created at "%s"`, name, workspaceDirPath), nil
+	return strings.WorkspaceCreated, nil
 }
