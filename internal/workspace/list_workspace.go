@@ -8,8 +8,8 @@ import (
 
 var WorkspaceListHeaders = []string{strings.KeyUpper, strings.NameUpper, strings.PathUpper, strings.ArchivedUpper}
 
-func GenerateWorkspaceList() (*table.Table, error) {
-	data, err := getAllWorkspacesData()
+func GenerateWorkspaceList(all bool, archived bool) (*table.Table, error) {
+	data, err := getWorkspacesData(all, archived)
 	if err != nil {
 		return nil, err
 	}

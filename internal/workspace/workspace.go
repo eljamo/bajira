@@ -113,7 +113,7 @@ func generateUniqueKey(name string, usedWorkspaceKeys []string) string {
 }
 
 // gets all workspace data from the workspace config files and it's path.
-func getAllWorkspacesData() ([][]string, error) {
+func getWorkspacesData(all bool, archived bool) ([][]string, error) {
 	allDirs, err := file.GetAllWorkspaceDirectories()
 	if err != nil {
 		return nil, err
@@ -126,6 +126,16 @@ func getAllWorkspacesData() ([][]string, error) {
 		err := toml.DecodeFromFile(configPath, &wsConfig)
 		if err != nil {
 			return nil, errorconc.LocalizedError(err, "failed to decode workspace config file")
+		}
+
+		// Skip non-archived workspaces if only archived workspaces are requested.
+		if archived && !wsConfig.Archived {
+			continue
+		}
+
+		// Skip archived workspaces if not all workspaces are requested.
+		if !all && !archived && wsConfig.Archived {
+			continue
 		}
 
 		archivedStr := bajiraStrings.NoCapitalized

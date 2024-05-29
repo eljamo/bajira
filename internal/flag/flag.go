@@ -1,19 +1,14 @@
 package flag
 
-import (
-	"github.com/eljamo/bajira/internal/strings"
-	"github.com/spf13/cobra"
-)
-
 const (
+	FlagAll           string = "all"
+	FlagArchived      string = "archived"
+	FlagA             string = "a"
+	FlagHelp          string = "help"
 	FlagH             string = "h"
 	FlagK             string = "k"
 	FlagN             string = "n"
-	FlagHelp          string = "help"
-	FlagWorkspaceName string = "workspace_name"
+	FlagR             string = "r"
 	FlagWorkspaceKey  string = "workspace_key"
+	FlagWorkspaceName string = "workspace_name"
 )
-
-func HelpOverride(cmd *cobra.Command) {
-	cmd.Flags().BoolP(FlagHelp, FlagH, false, strings.HelpDescription)
-}
