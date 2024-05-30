@@ -54,7 +54,7 @@ func GetApplicationConfig() (*ApplicationConfig, error) {
 
 	// override default values
 	if cfgFile.DataDirectory != "" {
-		cfg.DataDirectory = filepath.Join(cfgFile.DataDirectory)
+		cfg.DataDirectory = cfgFile.DataDirectory
 	}
 
 	if cfgFile.DefaultWorkspaceId != "" {
