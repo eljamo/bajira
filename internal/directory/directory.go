@@ -1,4 +1,4 @@
-package file
+package directory
 
 import (
 	"fmt"
@@ -8,12 +8,12 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/eljamo/bajira/internal/config"
+	"github.com/eljamo/bajira/internal/consts"
 	"github.com/eljamo/bajira/internal/errorconc"
 	gap "github.com/muesli/go-app-paths"
 )
 
-var scope = gap.NewScope(gap.User, config.BajiraApplicationName)
+var scope = gap.NewScope(gap.User, consts.BajiraApplicationName)
 
 var (
 	dirPermissionsVal = 0o755
@@ -21,7 +21,7 @@ var (
 )
 
 // createDir creates all the directories of a given path if they don't exist.
-func createAllDirectories(path string) error {
+func CreateAllDirectories(path string) error {
 	// Check if the directory already exists
 	if _, err := os.Stat(path); !os.IsNotExist(err) {
 		// Directory already exists
@@ -49,11 +49,6 @@ func GetDataDirectory() (string, error) {
 		return "", errorconc.LocalizedError(nil, "no data directory found")
 	}
 
-	err = createAllDirectories(dirs[0])
-	if err != nil {
-		return "", err
-	}
-
 	return dirs[0], nil
 }
 
@@ -68,7 +63,7 @@ func GetConfigDirectory() (string, error) {
 		return "", errorconc.LocalizedError(nil, "no config directory found")
 	}
 
-	err = createAllDirectories(dirs[0])
+	err = CreateAllDirectories(dirs[0])
 	if err != nil {
 		return "", err
 	}
@@ -84,7 +79,7 @@ func GetCacheDirectory() (string, error) {
 		return "", cerr
 	}
 
-	err = createAllDirectories(dir)
+	err = CreateAllDirectories(dir)
 	if err != nil {
 		return "", err
 	}
@@ -92,20 +87,23 @@ func GetCacheDirectory() (string, error) {
 	return dir, nil
 }
 
-// CreateWorkspaceRootDirectories creates the root directories for workspaces.
-func CreateWorkspaceRootDirectory() error {
-	dir, err := GetDataDirectory()
+func GetApplicationDirectories() (dataDir string, configDir string, cacheDir string, funcErr error) {
+	dataDir, err := GetDataDirectory()
 	if err != nil {
-		return err
+		return "", "", "", err
 	}
 
-	// create workspace directory if it doesn't exist
-	err = createAllDirectories(filepath.Join(dir, config.BajiraDirectoryNameWorkspace))
+	configDir, err = GetConfigDirectory()
 	if err != nil {
-		return err
+		return "", "", "", err
 	}
 
-	return nil
+	cacheDir, err = GetCacheDirectory()
+	if err != nil {
+		return "", "", "", err
+	}
+
+	return dataDir, configDir, cacheDir, nil
 }
 
 // SanitizeDirectoryName removes invalid characters from a directory name.
@@ -150,9 +148,9 @@ func createSingleDirectory(basePath, dirName, duplicateDirectoryNameFormat strin
 
 // CreateWorkspaceDirectory creates a workspace directory and handles duplicates by appending a suffix.
 func CreateWorkspaceDirectory(basePath, dirName string) (string, error) {
-	basePath = filepath.Join(basePath, config.BajiraDirectoryNameWorkspace)
+	basePath = filepath.Join(basePath, consts.BajiraDirectoryNameWorkspace)
 
-	err := createAllDirectories(basePath)
+	err := CreateAllDirectories(basePath)
 	if err != nil {
 		return "", err
 	}
@@ -161,7 +159,7 @@ func CreateWorkspaceDirectory(basePath, dirName string) (string, error) {
 }
 
 // Give a directory path and this will return a slice of directory names at that path.
-func getSubdirectoryPaths(path string) ([]string, error) {
+func GetSubdirectoryPaths(path string) ([]string, error) {
 	var paths []string
 
 	files, err := os.ReadDir(path)
@@ -177,20 +175,4 @@ func getSubdirectoryPaths(path string) ([]string, error) {
 	}
 
 	return paths, nil
-}
-
-// GetAllWorkspaceDirectories returns a slice of workspace directories.
-func GetAllWorkspaceDirectories() ([]string, error) {
-	dataDir, err := GetDataDirectory()
-	if err != nil {
-		return nil, err
-	}
-
-	workspaceDirPath := filepath.Join(dataDir, config.BajiraDirectoryNameWorkspace)
-	workspaceDirs, err := getSubdirectoryPaths(workspaceDirPath)
-	if err != nil {
-		return nil, err
-	}
-
-	return workspaceDirs, nil
 }

@@ -7,8 +7,9 @@ import (
 )
 
 var updateCmd = &cobra.Command{
-	Use:   command.CommandUpdate,
-	Short: strings.UpdateDescription,
+	Use:          command.CommandUpdate,
+	Short:        strings.UpdateDescription,
+	SilenceUsage: true,
 }
 
 func init() {

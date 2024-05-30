@@ -9,6 +9,6 @@ const (
 	FlagK             string = "k"
 	FlagN             string = "n"
 	FlagR             string = "r"
-	FlagWorkspaceKey  string = "workspace_key"
+	FlagWorkspaceId   string = "workspace_id"
 	FlagWorkspaceName string = "workspace_name"
 )

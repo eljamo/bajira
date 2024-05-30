@@ -7,8 +7,9 @@ import (
 )
 
 var unarchiveCmd = &cobra.Command{
-	Use:   command.CommandUnarchive,
-	Short: strings.UnarchiveDescription,
+	Use:          command.CommandUnarchive,
+	Short:        strings.UnarchiveDescription,
+	SilenceUsage: true,
 }
 
 func init() {

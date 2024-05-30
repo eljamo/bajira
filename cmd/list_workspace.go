@@ -8,32 +8,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	all      bool
-	archived bool
-)
-
 var listWorkspacesCmd = &cobra.Command{
-	Use:   command.CommandWorkspaces,
-	Short: strings.ListWorkspaceDescription,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		table, err := workspace.GenerateWorkspaceList(all, archived)
-		if err != nil {
-			return err
-		}
-
-		if table == nil {
-			cmd.Println(strings.NoWorkspacesFound)
-			return nil
-		}
-
-		cmd.Println(table)
-
-		return nil
-	},
+	Use:          command.CommandWorkspaces,
+	Short:        strings.ListWorkspaceDescription,
+	SilenceUsage: true,
+	RunE:         listWorkspaces,
 }
 
 func init() {
 	listWorkspacesCmd.Flags().BoolVarP(&all, flag.FlagAll, flag.FlagA, false, strings.ListAllWorkspacesDescription)
 	listWorkspacesCmd.Flags().BoolVarP(&archived, flag.FlagArchived, flag.FlagR, false, strings.ListArchivedWorkspacesDescription)
+}
+
+func listWorkspaces(cmd *cobra.Command, args []string) error {
+	table, err := workspace.GenerateWorkspaceList(cmd.Context(), all, archived)
+	if err != nil {
+		return err
+	}
+
+	cmd.Println(table)
+
+	return nil
 }

@@ -10,8 +10,9 @@ import (
 )
 
 var updateWorkspaceCmd = &cobra.Command{
-	Use:   command.CommandWorkspace,
-	Short: strings.UpdateWorkspaceDescription,
+	Use:          command.CommandWorkspace,
+	Short:        strings.UpdateWorkspaceDescription,
+	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Add logic for updating a workspace here")
 
@@ -21,10 +22,10 @@ var updateWorkspaceCmd = &cobra.Command{
 
 func init() {
 	updateWorkspaceCmd.Flags().StringVarP(
-		&workspaceKey,
-		flag.FlagWorkspaceKey,
+		&workspaceId,
+		flag.FlagWorkspaceId,
 		flag.FlagK,
 		"",
-		strings.WorkspaceKeyDescription,
+		strings.WorkspaceIdDescription,
 	)
 }

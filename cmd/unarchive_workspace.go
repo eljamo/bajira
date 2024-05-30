@@ -10,8 +10,9 @@ import (
 )
 
 var unarchiveWorkspaceCmd = &cobra.Command{
-	Use:   command.CommandWorkspace,
-	Short: strings.UnarchiveWorkspaceDescription,
+	Use:          command.CommandWorkspace,
+	Short:        strings.UnarchiveWorkspaceDescription,
+	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Add logic for unarchiving a workspace here")
 
@@ -21,10 +22,10 @@ var unarchiveWorkspaceCmd = &cobra.Command{
 
 func init() {
 	unarchiveWorkspaceCmd.Flags().StringVarP(
-		&workspaceKey,
-		flag.FlagWorkspaceKey,
+		&workspaceId,
+		flag.FlagWorkspaceId,
 		flag.FlagK,
 		"",
-		strings.WorkspaceKeyDescription,
+		strings.WorkspaceIdDescription,
 	)
 }

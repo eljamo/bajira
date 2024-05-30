@@ -7,8 +7,9 @@ import (
 )
 
 var deleteCmd = &cobra.Command{
-	Use:   command.CommandDelete,
-	Short: strings.DeleteDescription,
+	Use:          command.CommandDelete,
+	Short:        strings.DeleteDescription,
+	SilenceUsage: true,
 }
 
 func init() {

@@ -1,20 +1,22 @@
 package main
 
 import (
+	"context"
 	"embed"
 
 	"github.com/eljamo/bajira/cmd"
-	"github.com/eljamo/bajira/internal/locale"
+	"github.com/eljamo/bajira/internal/config"
+	"github.com/eljamo/bajira/internal/consts"
 )
 
 //go:embed po/*/*
 var POFS embed.FS
 
 func main() {
-	err := locale.Set()
+	cfg, err := config.GetApplicationConfig()
 	if err != nil {
 		panic(err)
 	}
 
-	cmd.Execute()
+	cmd.Execute(context.WithValue(context.Background(), config.ConfigContextKey(consts.Config), cfg))
 }

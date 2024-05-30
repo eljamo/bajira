@@ -7,8 +7,9 @@ import (
 )
 
 var listCmd = &cobra.Command{
-	Use:   command.CommandList,
-	Short: strings.ListDescription,
+	Use:          command.CommandList,
+	Short:        strings.ListDescription,
+	SilenceUsage: true,
 }
 
 func init() {

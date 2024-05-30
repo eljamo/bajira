@@ -1,9 +1,9 @@
 package command
 
-import "github.com/eljamo/bajira/internal/config"
+import "github.com/eljamo/bajira/internal/consts"
 
 const (
-	CommandApplicationName string = config.BajiraApplicationName
+	CommandApplicationName string = consts.BajiraApplicationName
 	CommandArchive         string = "archive"
 	CommandBoard           string = "board"
 	CommandCreate          string = "create"

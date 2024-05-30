@@ -3,6 +3,7 @@ package table
 import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/lipgloss/table"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/styles"
 )
 
@@ -35,9 +36,9 @@ func getColWidths(headers []string, rows [][]string) []int {
 	return colWidth
 }
 
-func Generate(headers []string, rows [][]string) *table.Table {
+func Generate(headers []string, rows [][]string) (*table.Table, error) {
 	if len(headers) == 0 || len(rows) == 0 {
-		return nil
+		return nil, errorconc.LocalizedError(nil, "no data to display")
 	}
 
 	colWidth := getColWidths(headers, rows)
@@ -68,5 +69,5 @@ func Generate(headers []string, rows [][]string) *table.Table {
 		Headers(headers...).
 		Rows(rows...)
 
-	return t
+	return t, nil
 }

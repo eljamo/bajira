@@ -10,8 +10,9 @@ import (
 )
 
 var archiveWorkspaceCmd = &cobra.Command{
-	Use:   command.CommandWorkspace,
-	Short: strings.ArchiveWorkspaceDescription,
+	Use:          command.CommandWorkspace,
+	Short:        strings.ArchiveWorkspaceDescription,
+	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("Add logic for archiving a workspace here")
 
@@ -21,10 +22,10 @@ var archiveWorkspaceCmd = &cobra.Command{
 
 func init() {
 	archiveWorkspaceCmd.Flags().StringVarP(
-		&workspaceKey,
-		flag.FlagWorkspaceKey,
+		&workspaceId,
+		flag.FlagWorkspaceId,
 		flag.FlagK,
 		"",
-		strings.WorkspaceKeyDescription,
+		strings.WorkspaceIdDescription,
 	)
 }

@@ -1,18 +1,30 @@
 package workspace
 
 import (
+	"context"
+
 	"github.com/charmbracelet/lipgloss/table"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/strings"
 	bajiraTable "github.com/eljamo/bajira/internal/table"
 )
 
-var WorkspaceListHeaders = []string{strings.KeyUpper, strings.NameUpper, strings.PathUpper, strings.ArchivedUpper}
+func GenerateWorkspaceList(ctx context.Context, all bool, archived bool) (*table.Table, error) {
+	workspaceListHeaders := []string{strings.IdUpper, strings.NameUpper, strings.PathUpper}
 
-func GenerateWorkspaceList(all bool, archived bool) (*table.Table, error) {
-	data, err := getWorkspacesData(all, archived)
+	if all {
+		workspaceListHeaders = append(workspaceListHeaders, strings.ArchivedUpper)
+	}
+
+	data, err := getWorkspaces(ctx, all, archived)
 	if err != nil {
 		return nil, err
 	}
 
-	return bajiraTable.Generate(WorkspaceListHeaders, data), nil
+	table, err := bajiraTable.Generate(workspaceListHeaders, data)
+	if err != nil {
+		return nil, errorconc.LocalizedError(err, "failed to generate table")
+	}
+
+	return table, nil
 }

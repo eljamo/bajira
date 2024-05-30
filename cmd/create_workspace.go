@@ -9,57 +9,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	workspaceKey  string
-	workspaceName string
-)
-
 var createWorkspaceCmd = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.CreateWorkspaceDescription,
 	SilenceUsage: true,
-	RunE: func(cmd *cobra.Command, args []string) error {
-		err := parseInput()
-		if err != nil {
-			return err
-		}
-
-		return createWorkspace(cmd)
-	},
-}
-
-func parseInput() error {
-	if workspaceName == "" {
-		err := workspace.CreateWorkspaceForm.Run()
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to run form")
-		}
-
-		workspaceName = workspace.CreateWorkspaceName
-		workspaceKey = workspace.CreateWorkspaceKey
-	}
-
-	return nil
-}
-
-func createWorkspace(cmd *cobra.Command) error {
-	msg, err := workspace.CreateWorkspace(workspaceName, workspaceKey)
-	if err != nil {
-		return err
-	}
-
-	cmd.Println(msg)
-
-	return nil
+	RunE:         createWorkspace,
 }
 
 func init() {
 	createWorkspaceCmd.Flags().StringVarP(
-		&workspaceKey,
-		flag.FlagWorkspaceKey,
+		&workspaceId,
+		flag.FlagWorkspaceId,
 		flag.FlagK,
 		"",
-		strings.WorkspaceKeyDescription,
+		strings.WorkspaceIdDescription,
 	)
 	createWorkspaceCmd.Flags().StringVarP(
 		&workspaceName,
@@ -68,4 +31,38 @@ func init() {
 		"",
 		strings.WorkspaceNameDescription,
 	)
+}
+
+func createWorkspace(cmd *cobra.Command, args []string) error {
+	err := parseCreateWorkspaceInput()
+	if err != nil {
+		return err
+	}
+
+	return setupWorkspace(cmd)
+}
+
+func parseCreateWorkspaceInput() error {
+	if workspaceName == "" {
+		err := workspace.CreateWorkspaceForm.Run()
+		if err != nil {
+			return errorconc.LocalizedError(err, "failed to initialize form")
+		}
+
+		workspaceName = workspace.CreateWorkspaceName
+		workspaceId = workspace.CreateWorkspaceId
+	}
+
+	return nil
+}
+
+func setupWorkspace(cmd *cobra.Command) error {
+	msg, err := workspace.CreateWorkspace(cmd.Context(), workspaceName, workspaceId)
+	if err != nil {
+		return err
+	}
+
+	cmd.Println(msg)
+
+	return nil
 }

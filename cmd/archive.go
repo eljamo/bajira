@@ -7,8 +7,9 @@ import (
 )
 
 var archiveCmd = &cobra.Command{
-	Use:   command.CommandArchive,
-	Short: strings.ArchiveDescription,
+	Use:          command.CommandArchive,
+	Short:        strings.ArchiveDescription,
+	SilenceUsage: true,
 }
 
 func init() {

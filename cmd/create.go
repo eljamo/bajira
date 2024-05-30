@@ -7,8 +7,9 @@ import (
 )
 
 var createCmd = &cobra.Command{
-	Use:   command.CommandCreate,
-	Short: strings.CreateDescription,
+	Use:          command.CommandCreate,
+	Short:        strings.CreateDescription,
+	SilenceUsage: true,
 }
 
 func init() {
