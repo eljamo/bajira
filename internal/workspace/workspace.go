@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"slices"
-	"strings"
 
 	"github.com/charmbracelet/huh"
 	"github.com/eljamo/bajira/internal/config"
@@ -30,16 +29,12 @@ var (
 	WorkspaceName string
 )
 
-func checkIfStringIsEmpty(str string) bool {
-	return len(strings.TrimSpace(str)) == 0
-}
-
 var workspaceNameAndKeyFormGroup = huh.NewGroup(
 	huh.NewInput().
 		Title(bajiraStrings.NameUpper).
 		Value(&WorkspaceName).
 		Validate(func(str string) error {
-			if checkIfStringIsEmpty(str) {
+			if bajiraStrings.CheckIfStringIsEmpty(str) {
 				return errorconc.LocalizedError(nil, "name cannot be empty")
 			}
 			return nil
@@ -49,7 +44,7 @@ var workspaceNameAndKeyFormGroup = huh.NewGroup(
 		Description(bajiraStrings.WorkspaceIdDescription).
 		Value(&WorkspaceId).
 		Validate(func(str string) error {
-			if len(str) >= 1 && checkIfStringIsEmpty(str) {
+			if len(str) >= 1 && bajiraStrings.CheckIfStringIsEmpty(str) {
 				return errorconc.LocalizedError(nil, "id cannot be empty")
 			}
 			return nil
@@ -103,7 +98,7 @@ func generateWorkspaceId(ctx context.Context, name string, customKey string) (st
 		return "", errorconc.LocalizedError(err, "failed to get used workspace ids")
 	}
 
-	if customKey != "" && !checkIfStringIsEmpty(customKey) {
+	if customKey != "" && !bajiraStrings.CheckIfStringIsEmpty(customKey) {
 		customKey = key.GenerateKey(customKey)
 		if slices.Contains(usedWorkspaceIds, customKey) {
 			return "", errorconc.LocalizedError(nil, "workspace id already exists", customKey)

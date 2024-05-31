@@ -9,6 +9,10 @@ import (
 	"golang.org/x/text/language"
 )
 
+func CheckIfStringIsEmpty(str string) bool {
+	return len(strings.TrimSpace(str)) == 0
+}
+
 func Capitalize(lang language.Tag, str string) string {
 	return cases.Title(lang).String(str)
 }

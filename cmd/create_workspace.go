@@ -45,7 +45,7 @@ func createWorkspace(cmd *cobra.Command, args []string) error {
 }
 
 func parseCreateWorkspaceInput(ctx context.Context) error {
-	if workspaceName == "" {
+	if strings.CheckIfStringIsEmpty(workspaceName) {
 		form, err := workspace.NewCreateWorkspaceForm(ctx)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")

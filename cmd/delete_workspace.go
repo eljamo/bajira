@@ -38,7 +38,7 @@ func deleteWorkspace(cmd *cobra.Command, args []string) error {
 }
 
 func parseDeleteWorkspaceInput(ctx context.Context) error {
-	if workspaceId == "" {
+	if strings.CheckIfStringIsEmpty(workspaceId) {
 		form, err := workspace.NewDeleteWorkspaceForm(ctx)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
