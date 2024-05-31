@@ -2,80 +2,148 @@ package config
 
 import (
 	"context"
+	"fmt"
+	"os/user"
 	"path/filepath"
 
 	"github.com/eljamo/bajira/internal/consts"
 	"github.com/eljamo/bajira/internal/directory"
 	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/toml"
+	"github.com/jeandeaual/go-locale"
 	"github.com/leonelquinteros/gotext"
 	"golang.org/x/text/language"
 )
 
 type ConfigContextKey string
 
+type Assignee struct {
+	Default   DefaultAssignee
+	Workspace []WorkspaceAssignee
+}
+
+type DefaultAssignee struct {
+	Name string `toml:"name"`
+}
+
+type WorkspaceAssignee struct {
+	WorkspaceID string `toml:"workspace_id"`
+	Name        string `toml:"name"`
+}
+
 type ApplicationConfig struct {
-	DataDirectory      string
-	DefaultWorkspaceId string
-	Locale             language.Tag
+	CacheDirectory     string       `toml:"cache_directory"`
+	ConfigDirectory    string       `toml:"config_directory"`
+	DataDirectory      string       `toml:"data_directory"`
+	DefaultWorkspaceId string       `toml:"default_workspace_id"`
+	Locale             language.Tag `toml:"locale"`
+	Assignee           Assignee
 }
 
 type ApplicationConfigFile struct {
-	DataDirectory      string
-	DefaultWorkspaceId string
-	Locale             string
+	DataDirectory      string `toml:"data_directory"`
+	DefaultWorkspaceId string `toml:"default_workspace_id"`
+	Locale             string `toml:"locale"`
+	Assignee           Assignee
+}
+
+func guessLocale() error {
+	userLocale, err := locale.GetLocale()
+	if err != nil {
+		return fmt.Errorf("failed to get user locale: %w", err)
+	}
+
+	gotext.Configure(
+		consts.BajiraPortableObjectDirectoryName,
+		userLocale,
+		consts.BajiraPortableObjectFileName,
+	)
+
+	return nil
+}
+
+func validateDirectories(dataDir, configDir, cacheDir string) error {
+	if dataDir == configDir {
+		return errorconc.LocalizedError(nil, "data directory and config directory are the same")
+	}
+	if dataDir == cacheDir {
+		return errorconc.LocalizedError(nil, "data directory and cache directory are the same")
+	}
+	return nil
+}
+
+func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
+	if cfgFile.DataDirectory != "" {
+		cfg.DataDirectory = cfgFile.DataDirectory
+	}
+	if cfgFile.DefaultWorkspaceId != "" {
+		cfg.DefaultWorkspaceId = cfgFile.DefaultWorkspaceId
+	}
+	if cfgFile.Locale != "" {
+		locale, err := language.Parse(cfgFile.Locale)
+		if err != nil {
+			return
+		}
+		cfg.Locale = locale
+	}
+	if cfgFile.Assignee.Default.Name != "" {
+		cfg.Assignee.Default.Name = cfgFile.Assignee.Default.Name
+	}
+	if len(cfgFile.Assignee.Workspace) > 0 {
+		cfg.Assignee.Workspace = cfgFile.Assignee.Workspace
+	}
 }
 
 func GetApplicationConfig() (*ApplicationConfig, error) {
-	// Get default application directories
-	dataDir, configDir, _, err := directory.GetApplicationDirectories()
+	// get system language first
+	err := guessLocale()
 	if err != nil {
 		return nil, err
 	}
 
-	// Parse the default language
+	dataDir, configDir, cacheDir, err := directory.GetApplicationDirectories()
+	if err != nil {
+		return nil, err
+	}
+
 	locale, err := language.Parse(consts.BajiraDefaultLanguage)
 	if err != nil {
 		return nil, errorconc.LocalizedError(err, "failed to parse default language")
 	}
 
-	// first set up the default values
-	cfg := &ApplicationConfig{
-		Locale:        locale,
-		DataDirectory: dataDir,
+	currentUser, err := user.Current()
+	if err != nil {
+		return nil, errorconc.LocalizedError(err, "failed to get current user")
 	}
 
-	// read config file to override default values
+	cfg := &ApplicationConfig{
+		CacheDirectory:  cacheDir,
+		ConfigDirectory: configDir,
+		DataDirectory:   dataDir,
+		Locale:          locale,
+		Assignee: Assignee{
+			Default: DefaultAssignee{
+				Name: currentUser.Username,
+			},
+		},
+	}
+
 	var cfgFile ApplicationConfigFile
 	err = toml.DecodeFromFile(filepath.Join(configDir, consts.BajiraFileNameConfig), &cfgFile)
 	if err != nil {
 		return nil, err
 	}
 
-	// override default values
-	if cfgFile.DataDirectory != "" {
-		cfg.DataDirectory = cfgFile.DataDirectory
-	}
-
-	if cfgFile.DefaultWorkspaceId != "" {
-		cfg.DefaultWorkspaceId = cfgFile.DefaultWorkspaceId
-	}
-
-	if cfgFile.Locale != "" {
-		locale, err := language.Parse(cfgFile.Locale)
-		if err != nil {
-			return nil, errorconc.LocalizedError(err, "failed to parse config language")
-		}
-		cfg.Locale = locale
-	}
-
-	// make sure the data directory exists
-	err = directory.CreateAllDirectories(cfg.DataDirectory)
-	if err != nil {
+	if err := validateDirectories(cfg.DataDirectory, cfg.ConfigDirectory, cfg.CacheDirectory); err != nil {
 		return nil, err
 	}
 
-	// configure the locale
+	overwriteConfig(cfg, &cfgFile)
+
+	if err := directory.CreateAllDirectories(cfg.DataDirectory); err != nil {
+		return nil, err
+	}
+
 	gotext.Configure(
 		consts.BajiraPortableObjectDirectoryName,
 		cfg.Locale.String(),
@@ -90,6 +158,5 @@ func GetConfigFromContext(ctx context.Context) (*ApplicationConfig, error) {
 	if !ok {
 		return nil, errorconc.LocalizedError(nil, "failed to get application config from context")
 	}
-
 	return cfg, nil
 }

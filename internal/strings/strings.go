@@ -1,6 +1,7 @@
 package strings
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/leonelquinteros/gotext"
@@ -8,9 +9,37 @@ import (
 	"golang.org/x/text/language"
 )
 
-// Capitalize capitalizes the first letter of a string.
 func Capitalize(lang language.Tag, str string) string {
 	return cases.Title(lang).String(str)
+}
+
+// FormatBool formats a boolean value to localized "true"/"false" and optionally converts to uppercase.
+func FormatBool(b bool, upper bool) string {
+	result := gotext.Get(strconv.FormatBool(b))
+	if upper {
+		return strings.ToUpper(result)
+	}
+	return result
+}
+
+// FormatBoolYN formats a boolean value to localized "yes"/"no" and optionally converts to uppercase.
+func FormatBoolYN(b bool, upper bool) string {
+	result := gotext.Get("no")
+	if b {
+		result = gotext.Get("yes")
+	}
+	if upper {
+		return strings.ToUpper(result)
+	}
+	return result
+}
+
+// FormatBoolCustom formats a boolean value either as localized "true"/"false" or "yes"/"no", capitalizing the result.
+func FormatBoolCapitalized(b bool, yesNo bool) string {
+	if yesNo {
+		return Capitalize(language.English, FormatBoolYN(b, false))
+	}
+	return Capitalize(language.English, FormatBool(b, false))
 }
 
 // Words

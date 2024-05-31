@@ -7,7 +7,7 @@ import (
 	"github.com/leonelquinteros/gotext"
 )
 
-// LocalizedError creates an error with a concatenated localized message and wraps the provided error.
+// LocalizedError creates a localized error message, optionally wrapping another error.
 func LocalizedError(wrapErr error, strs ...string) error {
 	if len(strs) == 0 {
 		return wrapErr

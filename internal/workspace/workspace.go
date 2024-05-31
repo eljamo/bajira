@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/charmbracelet/huh"
@@ -150,7 +149,7 @@ func getWorkspaces(ctx context.Context, all bool, archived bool) ([][]string, er
 
 func getWorkspaceInfo(workspaceData *WorkspaceConfig, dir string, all bool) []string {
 	if all {
-		return []string{workspaceData.Id, workspaceData.Name, dir, strconv.FormatBool(workspaceData.Archived)}
+		return []string{workspaceData.Id, workspaceData.Name, dir, bajiraStrings.FormatBoolCapitalized(workspaceData.Archived, true)}
 	} else {
 		return []string{workspaceData.Id, workspaceData.Name, dir}
 	}

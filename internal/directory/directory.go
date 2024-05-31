@@ -162,6 +162,12 @@ func CreateWorkspaceDirectory(basePath, dirName string) (string, error) {
 func GetSubdirectoryPaths(path string) ([]string, error) {
 	var paths []string
 
+	// create path
+	err := CreateAllDirectories(path)
+	if err != nil {
+		return nil, err
+	}
+
 	files, err := os.ReadDir(path)
 	if err != nil {
 		cerr := errorconc.LocalizedError(err, "failed to read directory")
