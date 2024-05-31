@@ -49,6 +49,7 @@ type ApplicationConfigFile struct {
 	Assignee           AssigneeConfig
 }
 
+// guessLocale guesses the user locale and sets it to the gotext package.
 func guessLocale() error {
 	userLocale, err := locale.GetLocale()
 	if err != nil {
@@ -64,6 +65,7 @@ func guessLocale() error {
 	return nil
 }
 
+// validateDirectories checks if the data directory, config directory, and cache directory are the same.
 func validateDirectories(dataDir, configDir, cacheDir string) error {
 	if dataDir == configDir {
 		return errorconc.LocalizedError(nil, "data directory and config directory are the same")
@@ -74,6 +76,7 @@ func validateDirectories(dataDir, configDir, cacheDir string) error {
 	return nil
 }
 
+// overwriteConfig overwrites the application config with the values from the config file.
 func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
 	if cfgFile.DataDirectory != "" {
 		cfg.DataDirectory = cfgFile.DataDirectory
@@ -99,6 +102,7 @@ func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
 	}
 }
 
+// GetApplicationConfig gets the application config from the config file and sets the locale.
 func GetApplicationConfig() (*ApplicationConfig, error) {
 	// guess locale
 	err := guessLocale()
@@ -158,6 +162,7 @@ func GetApplicationConfig() (*ApplicationConfig, error) {
 	return cfg, nil
 }
 
+// GetConfigFromContext gets the application config from the context.
 func GetConfigFromContext(ctx context.Context) (*ApplicationConfig, error) {
 	cfg, ok := ctx.Value(ConfigContextKey(consts.Config)).(*ApplicationConfig)
 	if !ok {

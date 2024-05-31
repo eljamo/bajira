@@ -56,8 +56,8 @@ func parseCreateWorkspaceInput(ctx context.Context) error {
 			return errorconc.LocalizedError(err, "failed to run form")
 		}
 
-		workspaceName = workspace.CreateWorkspaceName
-		workspaceId = workspace.CreateWorkspaceId
+		workspaceName = workspace.WorkspaceName
+		workspaceId = workspace.WorkspaceId
 	}
 
 	return nil

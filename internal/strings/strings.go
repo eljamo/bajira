@@ -54,7 +54,7 @@ var (
 	PathUpper     = strings.ToUpper(Path)
 )
 
-// Descriptions
+// Messages and Descriptions
 var (
 	ArchiveDescription                = gotext.Get("Archive a workspace, board, or task")
 	ArchiveWorkspaceDescription       = gotext.Get("Archive a workspace")
@@ -67,16 +67,13 @@ var (
 	ListWorkspaceDescription          = gotext.Get("List workspaces")
 	ListAllWorkspacesDescription      = gotext.Get("List all workspaces")
 	ListArchivedWorkspacesDescription = gotext.Get("List archived workspaces")
+	SelectAWorkspace                  = gotext.Get("Select a workspace")
 	UnarchiveWorkspaceDescription     = gotext.Get("Unarchive a workspace")
 	UnarchiveDescription              = gotext.Get("Unarchive a workspace, board, or task")
 	UpdateDescription                 = gotext.Get("Update a workspace, board, or task")
 	UpdateWorkspaceDescription        = gotext.Get("Update a workspace")
 	WorkspaceNameDescription          = gotext.Get("Name of the workspace")
 	WorkspaceIdDescription            = gotext.Get("Id for the workspace")
-)
-
-// Messages
-var (
-	WorkspaceCreated = gotext.Get("Workspace created")
-	WorkspaceDeleted = gotext.Get("Workspace deleted")
+	WorkspaceCreated                  = gotext.Get("Workspace created")
+	WorkspaceDeleted                  = gotext.Get("Workspace deleted")
 )

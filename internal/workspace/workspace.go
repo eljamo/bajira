@@ -12,6 +12,7 @@ import (
 	"github.com/eljamo/bajira/internal/consts"
 	"github.com/eljamo/bajira/internal/directory"
 	"github.com/eljamo/bajira/internal/errorconc"
+	"github.com/eljamo/bajira/internal/form"
 	"github.com/eljamo/bajira/internal/key"
 	bajiraStrings "github.com/eljamo/bajira/internal/strings"
 	"github.com/eljamo/bajira/internal/toml"
@@ -25,8 +26,8 @@ type WorkspaceConfig struct {
 }
 
 var (
-	CreateWorkspaceName string
-	CreateWorkspaceId   string
+	WorkspaceId   string
+	WorkspaceName string
 )
 
 func checkIfStringIsEmpty(str string) bool {
@@ -36,7 +37,7 @@ func checkIfStringIsEmpty(str string) bool {
 var workspaceNameAndKeyFormGroup = huh.NewGroup(
 	huh.NewInput().
 		Title(bajiraStrings.NameUpper).
-		Value(&CreateWorkspaceName).
+		Value(&WorkspaceName).
 		Validate(func(str string) error {
 			if checkIfStringIsEmpty(str) {
 				return errorconc.LocalizedError(nil, "name cannot be empty")
@@ -46,7 +47,7 @@ var workspaceNameAndKeyFormGroup = huh.NewGroup(
 	huh.NewInput().
 		Title(bajiraStrings.IdUpper).
 		Description(bajiraStrings.WorkspaceIdDescription).
-		Value(&CreateWorkspaceId).
+		Value(&WorkspaceId).
 		Validate(func(str string) error {
 			if len(str) >= 1 && checkIfStringIsEmpty(str) {
 				return errorconc.LocalizedError(nil, "id cannot be empty")
@@ -54,6 +55,21 @@ var workspaceNameAndKeyFormGroup = huh.NewGroup(
 			return nil
 		}),
 )
+
+func generateWorkspaceListFormGroup(ctx context.Context) (*huh.Group, error) {
+	workspaceIdsNamesPaths, err := getWorkspaces(ctx, false, false)
+	if err != nil {
+		return nil, err
+	}
+
+	wkspaceMap := make(map[string]string, len(workspaceIdsNamesPaths))
+	for _, wkspace := range workspaceIdsNamesPaths {
+		key := fmt.Sprintf("%s - %s", wkspace[0], wkspace[1])
+		wkspaceMap[key] = wkspace[0]
+	}
+
+	return huh.NewGroup(form.NewSelect(bajiraStrings.SelectAWorkspace, wkspaceMap, &WorkspaceId)), nil
+}
 
 // getUsedWorkspaceIds returns a slice of all workspace ids in use.
 func getUsedWorkspaceIds(ctx context.Context) ([]string, error) {
