@@ -17,34 +17,36 @@ import (
 
 type ConfigContextKey string
 
-type Assignee struct {
-	Default   DefaultAssignee
-	Workspace []WorkspaceAssignee
+type AssigneeConfig struct {
+	Default   DefaultAssigneeConfig
+	Workspace []WorkspaceAssigneeConfig
 }
 
-type DefaultAssignee struct {
+type DefaultAssigneeConfig struct {
 	Name string `toml:"name"`
 }
 
-type WorkspaceAssignee struct {
-	WorkspaceID string `toml:"workspace_id"`
+type WorkspaceAssigneeConfig struct {
 	Name        string `toml:"name"`
+	WorkspaceID string `toml:"workspace_id"`
 }
 
 type ApplicationConfig struct {
+	AccessibleMode     bool         `toml:"accessible_mode"`
 	CacheDirectory     string       `toml:"cache_directory"`
 	ConfigDirectory    string       `toml:"config_directory"`
 	DataDirectory      string       `toml:"data_directory"`
 	DefaultWorkspaceId string       `toml:"default_workspace_id"`
 	Locale             language.Tag `toml:"locale"`
-	Assignee           Assignee
+	Assignee           AssigneeConfig
 }
 
 type ApplicationConfigFile struct {
+	AccessibleMode     bool   `toml:"accessible_mode"`
 	DataDirectory      string `toml:"data_directory"`
 	DefaultWorkspaceId string `toml:"default_workspace_id"`
 	Locale             string `toml:"locale"`
-	Assignee           Assignee
+	Assignee           AssigneeConfig
 }
 
 func guessLocale() error {
@@ -92,10 +94,13 @@ func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
 	if len(cfgFile.Assignee.Workspace) > 0 {
 		cfg.Assignee.Workspace = cfgFile.Assignee.Workspace
 	}
+	if cfgFile.AccessibleMode {
+		cfg.AccessibleMode = cfgFile.AccessibleMode
+	}
 }
 
 func GetApplicationConfig() (*ApplicationConfig, error) {
-	// get system language first
+	// guess locale
 	err := guessLocale()
 	if err != nil {
 		return nil, err
@@ -121,8 +126,8 @@ func GetApplicationConfig() (*ApplicationConfig, error) {
 		ConfigDirectory: configDir,
 		DataDirectory:   dataDir,
 		Locale:          locale,
-		Assignee: Assignee{
-			Default: DefaultAssignee{
+		Assignee: AssigneeConfig{
+			Default: DefaultAssigneeConfig{
 				Name: currentUser.Username,
 			},
 		},

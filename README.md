@@ -54,8 +54,6 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 - [ ] bajira update config
   - [ ] bajira update config --data_directory
-  - [ ] bajira update config --config_directory
-  - [ ] bajira update config --cache_directory
   - [ ] bajira update config --default_workspace_id
   - [ ] bajira update config --locale
   - [ ] bajira update config --accessible-mode

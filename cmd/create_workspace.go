@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"context"
+
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/flag"
@@ -34,7 +36,7 @@ func init() {
 }
 
 func createWorkspace(cmd *cobra.Command, args []string) error {
-	err := parseCreateWorkspaceInput()
+	err := parseCreateWorkspaceInput(cmd.Context())
 	if err != nil {
 		return err
 	}
@@ -42,11 +44,16 @@ func createWorkspace(cmd *cobra.Command, args []string) error {
 	return setupWorkspace(cmd)
 }
 
-func parseCreateWorkspaceInput() error {
+func parseCreateWorkspaceInput(ctx context.Context) error {
 	if workspaceName == "" {
-		err := workspace.CreateWorkspaceForm.Run()
+		form, err := workspace.NewCreateWorkspaceForm(ctx)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
+		}
+
+		err = form.Run()
+		if err != nil {
+			return errorconc.LocalizedError(err, "failed to run form")
 		}
 
 		workspaceName = workspace.CreateWorkspaceName
