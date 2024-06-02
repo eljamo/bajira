@@ -6,43 +6,34 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 ```
 .
-└── workspace/
-    ├── WORK/
-    │   ├── .git/
+└── workspaces/
+    ├── work/
+    │   ├── .git
     │   ├── config.toml
-    │   └── board/
+    │   └── boards/
     │       ├── config.toml
     │       ├── DEV/
     │       │   ├── config.toml
-    │       │   └── task/
+    │       │   └── tasks/
     │       │       ├── config.toml
     │       │       ├── 1/
-    │       │       │   ├── config.toml
-    │       │       │   ├── description.md
-    │       │       │   └── subtask/
-    │       │       │       └── 1/
-    │       │       │           ├── config.toml
-    │       │       │           └── description.md
+    │       │       │   └── config.toml
     │       │       └── 2/
-    │       │           ├── config.toml
-    │       │           └── description.md
+    │       │           └── config.toml
     │       └── PRODUCT/
     │           ├── config.toml
-    │           └── task/
+    │           └── tasks/
     │               ├── config.toml
     │               ├── 1/
-    │               │   ├── config.toml
-    │               │   └── description.md
+    │               │   └── config.toml
     │               ├── 2/
-    │               │   ├── config.toml
-    │               │   └── description.md
+    │               │   └── config.toml
     │               └── 3/
-    │                   ├── config.toml
-    │                   └── description.md
-    └── PERSONAL/
-        ├── .git/
+    │                   └── config.toml
+    └── personal/
+        ├── .git
         ├── config.toml
-        └── board/
+        └── boards/
             ├── config.toml
             └── PROJECT1/
                 └── ...
@@ -68,7 +59,7 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 ### Workspace Commands
 
 - [x] bajira create workspace
-- [ ] bajira delete workspace --workspace_id
+- [x] bajira delete workspace --workspace_id
 - [ ] bajira update workspace --workspace_id
 - [ ] bajira archive workspace --workspace_id
 - [ ] bajira unarchive workspace --workspace_id
@@ -83,39 +74,19 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 ### Task Commands
 
-- [ ] bajira create task
-  - [ ] bajira create task --workspace_id --board_id
-  - [ ] bajira create task --workspace_id --board_id --task_id
-- [ ] bajira delete task
-  - [ ] bajira delete task --workspace_id --board_id --task_id
-  - [ ] bajira delete task --workspace_id --board_id --task_id --subtask_id
-- [ ] bajira update task
-  - [ ] bajira update task --workspace_id --board_id --task_id
-  - [ ] bajira update task --workspace_id --board_id --task_id --subtask_id
-- [ ] bajira archive task
-  - [ ] bajira archive task --workspace_id --board_id --task_id
-  - [ ] bajira archive task --workspace_id --board_id --task_id --subtask_id
-- [ ] bajira unarchive task
-  - [ ] bajira unarchive task --workspace_id --board_id --task_id
-  - [ ] bajira unarchive task --workspace_id --board_id --task_id --subtask_id
+- [ ] bajira create task --workspace_id --board_id
+- [ ] bajira delete task --workspace_id --board_id --task_id
+- [ ] bajira update task --workspace_id --board_id --task_id
+- [ ] bajira archive task --workspace_id --board_id --task_id
+- [ ] bajira unarchive task --workspace_id --board_id --task_id
 - [ ] bajira assign task
   - [ ] bajira assign task --workspace_id --board_id --task_id --to_self
-  - [ ] bajira assign task --workspace_id --board_id --task_id --subtask_id --to_self
   - [ ] bajira assign task --workspace_id --board_id --task_id --assingee
-  - [ ] bajira assign task --workspace_id --board_id --task_id --subtask_id --assignee
 - [ ] bajira unassign task
   - [ ] bajira unassign task --workspace_id --board_id --task_id --self
-  - [ ] bajira unassign task --workspace_id --board_id --task_id --subtask_id --self
   - [ ] bajira unassign task --workspace_id --board_id --task_id --assignee
-  - [ ] bajira unassign task --workspace_id --board_id --task_id --subtask_id --assignee
-- [ ] bajira move task
-  - [ ] bajira move task --workspace_id --from_board_id --to_board_id --task_id
-  - [ ] bajira move task --workspace_id --from_board_id --to_board_id --task_id --subtask_id
-  - [ ] bajira move task --workspace_id --from_board_id --to_board_id --task_id --to_task_id
-  - [ ] bajira move task --workspace_id --from_board_id --to_board_id --task_id --subtask_id --to_task_id
-- [ ] bajira flag task
-  - [ ] bajira flag task --workspace_id --from_board_id --to_board_id --task_id
-  - [ ] bajira flag task --workspace_id --from_board_id --to_board_id --task_id --subtask_id
+- [ ] bajira move task --workspace_id --from_board_id --to_board_id --task_id
+- [ ] bajira flag task --workspace_id --from_board_id --to_board_id --task_id
 
 #### Other Task Commands
 
@@ -160,21 +131,22 @@ I'll probably add support for these kinds of attributes on tasks
 
 I may create these sets of commands after the first planned bunch are done
 
-### Sprint Commands
-
-- [ ] bajira create sprint
-- [ ] bajira update sprint --sprint_id
-- [ ] bajira delete sprint --sprint_id
-- [ ] bijira start sprint --sprint_id
-- [ ] bijira stop sprint --sprint_id
-- [ ] bijira archive sprint --sprint_id
-- [ ] bijira unarchive sprint --sprint_id
-
 ### Timer Commands
 
-- [ ] bajira start task
+- [ ] bajira start task timer
   - [ ] bajira start task timer --workspace_id --board_id --task_id
-  - [ ] bajira timer task timer --workspace_id --board_id --task_id --subtask_id
   - [ ] bajira timer task timer --workspace_id --board_id --task_id --pomodoro
   - [ ] bajira timer task timer --workspace_id --board_id --task_id --5217
 - [ ] bajira stop timer
+
+### Goal Commands
+
+- [ ] bajira set yearly goal
+- [ ] bajira set quaterly goal
+  - [ ] bajira set quaterly goal --yearly_goal_id
+- [ ] bajira set monthly goal
+  - [ ] bajira set monthly goal --yearly_goal_id
+- [ ] bajira set weekly goal
+  - [ ] bajira set weekly goal --yearly_goal_id
+- [ ] bajira set daily goal
+  - [ ] bajira set daily goal --yearly_goal_id
