@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
-	"strings"
-	"unicode"
 
 	"github.com/eljamo/bajira/internal/consts"
 	"github.com/eljamo/bajira/internal/errorconc"
+	"github.com/eljamo/bajira/internal/strings"
 	gap "github.com/muesli/go-app-paths"
 )
 
@@ -110,24 +108,12 @@ func GetApplicationDirectories() (dataDir string, configDir string, cacheDir str
 	return dataDir, configDir, cacheDir, nil
 }
 
-// SanitizeDirectoryName removes invalid characters from a directory name.
-func sanitizeDirectoryName(input string) string {
-	// Replace invalid characters with an empty string
-	re := regexp.MustCompile(`[<>:"/\\|?*\x00-\x1F]`)
-	sanitized := re.ReplaceAllString(input, "_")
-
-	// Trim leading and trailing underscores or whitespace
-	sanitized = strings.TrimFunc(sanitized, func(r rune) bool {
-		return unicode.IsSpace(r) || r == '_'
-	})
-
-	// Return the sanitized directory name
-	return sanitized
-}
-
 // CreateDirectory creates a directory and handles duplicates by appending a suffix.
-func createSingleDirectory(basePath, dirName, duplicateDirectoryNameFormat string) (string, error) {
-	finalDirName := sanitizeDirectoryName(dirName)
+func CreateSingleDirectory(basePath, dirName, duplicateDirectoryNameFormat string) (string, error) {
+	finalDirName := strings.SanitizeString(dirName)
+	if strings.StringIsEmpty(finalDirName) {
+		return "", errorconc.LocalizedError(nil, "directory name is empty")
+	}
 	fullPath := filepath.Join(basePath, finalDirName)
 	counter := 1
 
@@ -148,18 +134,6 @@ func createSingleDirectory(basePath, dirName, duplicateDirectoryNameFormat strin
 		finalDirName = fmt.Sprintf(duplicateDirectoryNameFormat, dirName, counter)
 		fullPath = filepath.Join(basePath, finalDirName)
 	}
-}
-
-// CreateWorkspaceDirectory creates a workspace directory and handles duplicates by appending a suffix.
-func CreateWorkspaceDirectory(basePath, dirName string) (string, error) {
-	basePath = filepath.Join(basePath, consts.BajiraDirectoryNameWorkspace)
-
-	err := CreateAllDirectories(basePath)
-	if err != nil {
-		return "", err
-	}
-
-	return createSingleDirectory(basePath, dirName, "%s (%d)")
 }
 
 // Give a directory path and this will return a slice of directory names at that path.

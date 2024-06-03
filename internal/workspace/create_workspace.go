@@ -15,8 +15,21 @@ import (
 
 // NewCreateWorkspaceForm creates a new form for creating a workspace. The context is used to get the configuration.
 // Which is used to determine if the form should be in accessible mode or not.
-func NewCreateWorkspaceForm(ctx context.Context) (*huh.Form, error) {
-	return form.New(ctx, workspaceNameAndKeyFormGroup)
+func NewCreateWorkspaceForm(ctx context.Context, workspaceId string, workspaceName string) (*huh.Form, error) {
+	return form.New(ctx, NewWorkspaceIdAndNameFormGroup(workspaceId, workspaceName))
+}
+
+// createWorkspaceDirectory creates a workspace directory with the given name in the base path.
+// If the directory already exists, a directory with a name appended with a number will be created.
+func createWorkspaceDirectory(basePath, dirName string) (string, error) {
+	basePath = filepath.Join(basePath, consts.BajiraDirectoryNameWorkspace)
+
+	err := directory.CreateAllDirectories(basePath)
+	if err != nil {
+		return "", err
+	}
+
+	return directory.CreateSingleDirectory(basePath, dirName, "%s (%d)")
 }
 
 // CreateWorkspace creates a new workspace with the given name in the data directory.
@@ -32,7 +45,7 @@ func CreateWorkspace(ctx context.Context, name string, customKey string) (string
 		return "", err
 	}
 
-	workspaceDirPath, err := directory.CreateWorkspaceDirectory(dataDirPath, workspaceId)
+	workspaceDirPath, err := createWorkspaceDirectory(dataDirPath, workspaceId)
 	if err != nil {
 		cerr := errorconc.LocalizedError(err, "failed to create workspace", name)
 		return "", cerr

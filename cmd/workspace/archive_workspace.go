@@ -1,4 +1,4 @@
-package cmd
+package workspace
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var archiveWorkspaceCmd = &cobra.Command{
+var ArchiveWorkspaceCmd = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.ArchiveWorkspaceDescription,
 	SilenceUsage: true,
@@ -19,7 +19,7 @@ var archiveWorkspaceCmd = &cobra.Command{
 }
 
 func init() {
-	archiveWorkspaceCmd.Flags().StringVarP(
+	ArchiveWorkspaceCmd.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
 		flag.FlagK,
@@ -38,7 +38,7 @@ func runArchiveWorkspace(cmd *cobra.Command, args []string) error {
 }
 
 func parseArchiveWorkspaceInput(ctx context.Context) error {
-	if strings.CheckIfStringIsEmpty(workspaceId) {
+	if strings.StringIsEmpty(workspaceId) {
 		form, err := workspace.NewSelectWorkspaceForm(ctx, false, false)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")

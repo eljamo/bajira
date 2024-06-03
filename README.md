@@ -62,7 +62,7 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 - [x] bajira delete workspace --workspace_id
 - [x] bajira update workspace --workspace_id
 - [x] bajira archive workspace --workspace_id
-- [ ] bajira unarchive workspace --workspace_id
+- [x] bajira unarchive workspace --workspace_id
 
 ### Board Commands
 

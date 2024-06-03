@@ -1,6 +1,7 @@
 package strings
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -9,7 +10,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-func CheckIfStringIsEmpty(str string) bool {
+func StringIsEmpty(str string) bool {
 	return len(strings.TrimSpace(str)) == 0
 }
 
@@ -46,6 +47,11 @@ func FormatBoolCapitalized(b bool, yesNo bool) string {
 	return Capitalize(language.English, FormatBool(b, false))
 }
 
+func SanitizeString(str string) string {
+	re := regexp.MustCompile(`[^\p{L}\p{N}]`)
+	return re.ReplaceAllString(str, "")
+}
+
 // Words
 var (
 	Archived      = gotext.Get("archived")
@@ -78,6 +84,8 @@ var (
 	UpdateWorkspaceDescription        = gotext.Get("Update a workspace")
 	WorkspaceNameDescription          = gotext.Get("Name of the workspace")
 	WorkspaceIdDescription            = gotext.Get("Id for the workspace")
+	NewWorkspaceIdDescription         = gotext.Get("New id for the workspace")
+	NewWorkspaceNameDescription       = gotext.Get("New name for the workspace")
 	WorkspaceCreated                  = gotext.Get("Workspace created")
 	WorkspaceDeleted                  = gotext.Get("Workspace deleted")
 	WorkspaceArchived                 = gotext.Get("Workspace archived")

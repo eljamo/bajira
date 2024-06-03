@@ -1,4 +1,4 @@
-package cmd
+package workspace
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var deleteWorkspaceCmd = &cobra.Command{
+var DeleteWorkspaceCmd = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.DeleteWorkspaceDescription,
 	SilenceUsage: true,
@@ -19,13 +19,15 @@ var deleteWorkspaceCmd = &cobra.Command{
 }
 
 func init() {
-	deleteWorkspaceCmd.Flags().StringVarP(
+	DeleteWorkspaceCmd.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
 		flag.FlagK,
 		"",
 		strings.WorkspaceIdDescription,
 	)
+	DeleteWorkspaceCmd.Flags().BoolVarP(&all, flag.FlagAll, flag.FlagA, false, strings.ListAllWorkspacesDescription)
+	DeleteWorkspaceCmd.Flags().BoolVarP(&archived, flag.FlagArchived, flag.FlagR, false, strings.ListArchivedWorkspacesDescription)
 }
 
 func runDeleteWorkspaceCmd(cmd *cobra.Command, args []string) error {
@@ -38,8 +40,8 @@ func runDeleteWorkspaceCmd(cmd *cobra.Command, args []string) error {
 }
 
 func parseDeleteWorkspaceInput(ctx context.Context) error {
-	if strings.CheckIfStringIsEmpty(workspaceId) {
-		form, err := workspace.NewSelectWorkspaceForm(ctx, true, false)
+	if strings.StringIsEmpty(workspaceId) {
+		form, err := workspace.NewSelectWorkspaceForm(ctx, all, archived)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}

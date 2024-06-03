@@ -7,7 +7,7 @@ import (
 )
 
 func changeWorkspaceArchiveStatus(ctx context.Context, workspaceId string, status bool) (string, error) {
-	cfg, err := getWorkspaceConfig(ctx, workspaceId)
+	cfg, err := GetWorkspaceConfig(ctx, workspaceId)
 	if err != nil {
 		return "", err
 	}

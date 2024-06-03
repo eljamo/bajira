@@ -9,13 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	all           bool
-	archived      bool
-	workspaceId   string
-	workspaceName string
-)
-
 var rootCmd = &cobra.Command{
 	Use:   consts.BajiraApplicationName,
 	Short: strings.BajiraApplicationDescription,

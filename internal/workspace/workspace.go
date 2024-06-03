@@ -29,27 +29,37 @@ var (
 	WorkspaceName string
 )
 
-var workspaceNameAndKeyFormGroup = huh.NewGroup(
-	huh.NewInput().
-		Title(bajiraStrings.NameUpper).
-		Value(&WorkspaceName).
-		Validate(func(str string) error {
-			if bajiraStrings.CheckIfStringIsEmpty(str) {
-				return errorconc.LocalizedError(nil, "name cannot be empty")
-			}
-			return nil
-		}),
-	huh.NewInput().
-		Title(bajiraStrings.IdUpper).
-		Description(bajiraStrings.WorkspaceIdDescription).
-		Value(&WorkspaceId).
-		Validate(func(str string) error {
-			if len(str) >= 1 && bajiraStrings.CheckIfStringIsEmpty(str) {
-				return errorconc.LocalizedError(nil, "id cannot be empty")
-			}
-			return nil
-		}),
-)
+func NewWorkspaceIdAndNameFormGroup(id, name string) *huh.Group {
+	if !bajiraStrings.StringIsEmpty(id) {
+		WorkspaceId = id
+	}
+
+	if !bajiraStrings.StringIsEmpty(name) {
+		WorkspaceName = name
+	}
+
+	return huh.NewGroup(
+		huh.NewInput().
+			Title(bajiraStrings.IdUpper).
+			Description(bajiraStrings.WorkspaceIdDescription).
+			Value(&WorkspaceId).
+			Validate(func(str string) error {
+				if len(str) >= 1 && bajiraStrings.StringIsEmpty(str) {
+					return errorconc.LocalizedError(nil, "id cannot be empty")
+				}
+				return nil
+			}),
+		huh.NewInput().
+			Title(bajiraStrings.NameUpper).
+			Value(&WorkspaceName).
+			Validate(func(str string) error {
+				if bajiraStrings.StringIsEmpty(str) {
+					return errorconc.LocalizedError(nil, "name cannot be empty")
+				}
+				return nil
+			}),
+	)
+}
 
 func generateWorkspaceListFormGroup(ctx context.Context, all bool, archived bool) (*huh.Group, error) {
 	workspaceIdsNamesPaths, err := getWorkspaces(ctx, all, archived)
@@ -98,7 +108,7 @@ func generateWorkspaceId(ctx context.Context, name string, customKey string) (st
 		return "", errorconc.LocalizedError(err, "failed to get used workspace ids")
 	}
 
-	if customKey != "" && !bajiraStrings.CheckIfStringIsEmpty(customKey) {
+	if !bajiraStrings.StringIsEmpty(customKey) {
 		customKey = key.GenerateKey(customKey)
 		if slices.Contains(usedWorkspaceIds, customKey) {
 			return "", errorconc.LocalizedError(nil, "workspace id already exists", customKey)
@@ -201,7 +211,7 @@ func getWorkspacePath(ctx context.Context, workspaceId string) (string, error) {
 	return "", errorconc.LocalizedError(nil, "workspace not found", workspaceId)
 }
 
-func getWorkspaceConfig(ctx context.Context, workspaceId string) (*WorkspaceConfig, error) {
+func GetWorkspaceConfig(ctx context.Context, workspaceId string) (*WorkspaceConfig, error) {
 	path, err := getWorkspacePath(ctx, workspaceId)
 	if err != nil {
 		return nil, err

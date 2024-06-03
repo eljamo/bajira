@@ -20,7 +20,7 @@ require (
 	github.com/charmbracelet/bubbles v0.18.0 // indirect
 	github.com/charmbracelet/bubbletea v0.26.4 // indirect
 	github.com/charmbracelet/x/ansi v0.1.2 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20240529170602-5872190e21dd // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20240531163045-e5176ed4ece8 // indirect
 	github.com/charmbracelet/x/input v0.1.1 // indirect
 	github.com/charmbracelet/x/term v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.1.2 // indirect

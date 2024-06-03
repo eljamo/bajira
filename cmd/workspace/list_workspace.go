@@ -1,4 +1,4 @@
-package cmd
+package workspace
 
 import (
 	"github.com/eljamo/bajira/internal/command"
@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var listWorkspacesCmd = &cobra.Command{
+var ListWorkspacesCmd = &cobra.Command{
 	Use:          command.CommandWorkspaces,
 	Short:        strings.ListWorkspaceDescription,
 	SilenceUsage: true,
@@ -16,8 +16,8 @@ var listWorkspacesCmd = &cobra.Command{
 }
 
 func init() {
-	listWorkspacesCmd.Flags().BoolVarP(&all, flag.FlagAll, flag.FlagA, false, strings.ListAllWorkspacesDescription)
-	listWorkspacesCmd.Flags().BoolVarP(&archived, flag.FlagArchived, flag.FlagR, false, strings.ListArchivedWorkspacesDescription)
+	ListWorkspacesCmd.Flags().BoolVarP(&all, flag.FlagAll, flag.FlagA, false, strings.ListAllWorkspacesDescription)
+	ListWorkspacesCmd.Flags().BoolVarP(&archived, flag.FlagArchived, flag.FlagR, false, strings.ListArchivedWorkspacesDescription)
 }
 
 func listWorkspaces(cmd *cobra.Command, args []string) error {
