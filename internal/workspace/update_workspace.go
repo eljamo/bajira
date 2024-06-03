@@ -2,8 +2,10 @@ package workspace
 
 import (
 	"context"
+	"slices"
 
 	"github.com/charmbracelet/huh"
+	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/form"
 )
 
@@ -20,6 +22,15 @@ func UpdateWorkspace(ctx context.Context, workspaceId string, newWorkspaceId str
 	}
 
 	if cfg.Id != newWorkspaceId {
+		usedWorkspaceIds, err := getUsedWorkspaceIds(ctx)
+		if err != nil {
+			return err
+		}
+
+		if slices.Contains(usedWorkspaceIds, newWorkspaceId) {
+			return errorconc.LocalizedError(nil, "workspace_id already in use")
+		}
+
 		cfg.Id = newWorkspaceId
 	}
 
