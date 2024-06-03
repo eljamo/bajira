@@ -80,4 +80,6 @@ var (
 	WorkspaceIdDescription            = gotext.Get("Id for the workspace")
 	WorkspaceCreated                  = gotext.Get("Workspace created")
 	WorkspaceDeleted                  = gotext.Get("Workspace deleted")
+	WorkspaceArchived                 = gotext.Get("Workspace archived")
+	WorkspaceUnarchived               = gotext.Get("Workspace unarchived")
 )

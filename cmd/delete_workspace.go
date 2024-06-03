@@ -15,7 +15,7 @@ var deleteWorkspaceCmd = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.DeleteWorkspaceDescription,
 	SilenceUsage: true,
-	RunE:         deleteWorkspace,
+	RunE:         runDeleteWorkspaceCmd,
 }
 
 func init() {
@@ -28,18 +28,18 @@ func init() {
 	)
 }
 
-func deleteWorkspace(cmd *cobra.Command, args []string) error {
+func runDeleteWorkspaceCmd(cmd *cobra.Command, args []string) error {
 	err := parseDeleteWorkspaceInput(cmd.Context())
 	if err != nil {
 		return err
 	}
 
-	return removeWorkspace(cmd)
+	return deleteWorkspace(cmd)
 }
 
 func parseDeleteWorkspaceInput(ctx context.Context) error {
 	if strings.CheckIfStringIsEmpty(workspaceId) {
-		form, err := workspace.NewDeleteWorkspaceForm(ctx)
+		form, err := workspace.NewSelectWorkspaceForm(ctx, true, false)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}
@@ -55,7 +55,7 @@ func parseDeleteWorkspaceInput(ctx context.Context) error {
 	return nil
 }
 
-func removeWorkspace(cmd *cobra.Command) error {
+func deleteWorkspace(cmd *cobra.Command) error {
 	msg, err := workspace.DeleteWorkspace(cmd.Context(), workspaceId)
 	if err != nil {
 		return err

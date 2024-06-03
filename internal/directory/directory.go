@@ -87,6 +87,10 @@ func GetCacheDirectory() (string, error) {
 	return dir, nil
 }
 
+// GetApplicationDirectoriesFunc is a type of function that returns the application directories.
+type GetApplicationDirectoriesFunc func() (dataDir string, configDir string, cacheDir string, funcErr error)
+
+// GetApplicationDirectories returns the application directories.
 func GetApplicationDirectories() (dataDir string, configDir string, cacheDir string, funcErr error) {
 	dataDir, err := GetDataDirectory()
 	if err != nil {

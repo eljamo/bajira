@@ -60,8 +60,8 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 - [x] bajira create workspace
 - [x] bajira delete workspace --workspace_id
-- [ ] bajira update workspace --workspace_id
-- [ ] bajira archive workspace --workspace_id
+- [x] bajira update workspace --workspace_id
+- [x] bajira archive workspace --workspace_id
 - [ ] bajira unarchive workspace --workspace_id
 
 ### Board Commands
@@ -133,6 +133,13 @@ I may create these sets of commands after the first planned bunch are done
 
 ### Timer Commands
 
+- [ ] bajira start timer
+  - [ ] bajira start timer --context
+  - [ ] bajira start timer --context --pomodoro
+  - [ ] bajira start timer --context --5217
+  - [ ] bajira start timer --context --title
+  - [ ] bajira start timer --context --title --pomodoro
+  - [ ] bajira start timer --context --title --5217
 - [ ] bajira start task timer
   - [ ] bajira start task timer --workspace_id --board_id --task_id
   - [ ] bajira timer task timer --workspace_id --board_id --task_id --pomodoro
@@ -150,3 +157,32 @@ I may create these sets of commands after the first planned bunch are done
   - [ ] bajira set weekly goal --yearly_goal_id
 - [ ] bajira set daily goal
   - [ ] bajira set daily goal --yearly_goal_id
+
+### Schedule Commands
+
+- [ ] bajira schedule task
+  - [ ] bajira schedule task --workspace_id --board_id --task_id --date --time-start --time-end
+  - [ ] bajira schedule task --workspace_id --board_id --task_id --date_time_start --date_time_end
+- [ ] bajira schedule event
+  - [ ] bajira schedule event --type --title --description --date --time-start --time-end --workspace_id
+  - [ ] bajira schedule event --type --title --description --date_time_start --date_time_end --workspace_id
+- [ ] bajira assign scheduled task
+  - [ ] bajira assign scheduled task --workspace_id --to_self
+  - [ ] bajira assign scheduled task --workspace_id --assingee
+- [ ] bajira unassign scheduled task
+  - [ ] bajira unassign scheduled task --workspace_id --self
+  - [ ] bajira unassign scheduled task --workspace_id --assignee
+- [ ] bajira assign scheduled event
+  - [ ] bajira assign scheduled event --workspace_id --to_self
+  - [ ] bajira assign scheduled event --workspace_id --assingee
+- [ ] bajira unassign scheduled event
+  - [ ] bajira unassign scheduled event --workspace_id --self
+  - [ ] bajira unassign scheduled event --workspace_id --assignee
+- bajira show schedule
+  - [ ] bajira show schedule --self
+  - [ ] bajira show schedule --assignee
+
+### Log Commands
+
+- [ ] bajira log distraction
+  - [ ] bajira log distraction

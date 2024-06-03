@@ -51,8 +51,8 @@ var workspaceNameAndKeyFormGroup = huh.NewGroup(
 		}),
 )
 
-func generateWorkspaceListFormGroup(ctx context.Context) (*huh.Group, error) {
-	workspaceIdsNamesPaths, err := getWorkspaces(ctx, false, false)
+func generateWorkspaceListFormGroup(ctx context.Context, all bool, archived bool) (*huh.Group, error) {
+	workspaceIdsNamesPaths, err := getWorkspaces(ctx, all, archived)
 	if err != nil {
 		return nil, err
 	}
@@ -201,6 +201,30 @@ func getWorkspacePath(ctx context.Context, workspaceId string) (string, error) {
 	return "", errorconc.LocalizedError(nil, "workspace not found", workspaceId)
 }
 
+func getWorkspaceConfig(ctx context.Context, workspaceId string) (*WorkspaceConfig, error) {
+	path, err := getWorkspacePath(ctx, workspaceId)
+	if err != nil {
+		return nil, err
+	}
+
+	return getWorkspaceData(path)
+}
+
+func updateWorkspaceConfig(ctx context.Context, workspaceId string, wsConfig *WorkspaceConfig) error {
+	path, err := getWorkspacePath(ctx, workspaceId)
+	if err != nil {
+		return err
+	}
+
+	configPath := filepath.Join(path, consts.BajiraFileNameConfig)
+	err = toml.EncodeToFile(wsConfig, configPath)
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to encode workspace config file")
+	}
+
+	return nil
+}
+
 func getWorkspaceDirectoryPath(ctx context.Context) (string, error) {
 	cfg, err := config.GetConfigFromContext(ctx)
 	if err != nil {
@@ -208,4 +232,13 @@ func getWorkspaceDirectoryPath(ctx context.Context) (string, error) {
 	}
 
 	return filepath.Join(cfg.DataDirectory, consts.BajiraDirectoryNameWorkspace), nil
+}
+
+func NewSelectWorkspaceForm(ctx context.Context, all bool, archived bool) (*huh.Form, error) {
+	group, err := generateWorkspaceListFormGroup(ctx, all, archived)
+	if err != nil {
+		return nil, err
+	}
+
+	return form.New(ctx, group)
 }

@@ -102,15 +102,15 @@ func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
 	}
 }
 
-// GetApplicationConfig gets the application config from the config file and sets the locale.
-func GetApplicationConfig() (*ApplicationConfig, error) {
+// getApplicationConfig gets the application config from the config file and sets the locale.
+func getApplicationConfig(getAppDirsFunc directory.GetApplicationDirectoriesFunc) (*ApplicationConfig, error) {
 	// guess locale
 	err := guessLocale()
 	if err != nil {
 		return nil, err
 	}
 
-	dataDir, configDir, cacheDir, err := directory.GetApplicationDirectories()
+	dataDir, configDir, cacheDir, err := getAppDirsFunc()
 	if err != nil {
 		return nil, err
 	}
@@ -160,6 +160,11 @@ func GetApplicationConfig() (*ApplicationConfig, error) {
 	)
 
 	return cfg, nil
+}
+
+// GetApplicationConfig gets the application config from the config file and sets the locale.
+func GetApplicationConfig() (*ApplicationConfig, error) {
+	return getApplicationConfig(directory.GetApplicationDirectories)
 }
 
 // GetConfigFromContext gets the application config from the context.
