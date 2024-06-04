@@ -13,10 +13,10 @@ import (
 var POFS embed.FS
 
 func main() {
-	cfg, err := config.GetApplicationConfig()
+	cfg, err := config.GetBajiraConfig()
 	if err != nil {
 		panic(err)
 	}
 
-	cmd.Execute(context.WithValue(context.Background(), config.ConfigContextKey(consts.Config), cfg))
+	cmd.Execute(context.WithValue(context.Background(), config.ContextConfigKey(consts.BajiraContextKeyConfig), cfg))
 }

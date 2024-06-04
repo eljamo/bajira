@@ -1,4 +1,4 @@
-package workspace
+package boardcmd
 
 import (
 	"context"
@@ -11,35 +11,42 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var UnarchiveWorkspaceCmd = &cobra.Command{
-	Use:          command.CommandWorkspace,
-	Short:        strings.UnarchiveWorkspaceDescription,
+var ArchiveBoard = &cobra.Command{
+	Use:          command.CommandBoard,
+	Short:        strings.ArchiveBoardDescription,
 	SilenceUsage: true,
-	RunE:         runUnarchiveWorkspace,
+	RunE:         runArchiveBoard,
 }
 
 func init() {
-	UnarchiveWorkspaceCmd.Flags().StringVarP(
+	ArchiveBoard.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
-		flag.FlagK,
+		flag.FlagI,
 		"",
 		strings.WorkspaceIdDescription,
 	)
+	ArchiveBoard.Flags().StringVarP(
+		&boardId,
+		flag.FlagBoardId,
+		flag.FlagB,
+		"",
+		strings.BoardIdDescription,
+	)
 }
 
-func runUnarchiveWorkspace(cmd *cobra.Command, args []string) error {
-	err := parseUnarchiveWorkspaceInput(cmd.Context())
+func runArchiveBoard(cmd *cobra.Command, args []string) error {
+	err := parseArchiveBoardInput(cmd.Context())
 	if err != nil {
 		return err
 	}
 
-	return unarchiveWorkspace(cmd)
+	return archiveBoard(cmd)
 }
 
-func parseUnarchiveWorkspaceInput(ctx context.Context) error {
+func parseArchiveBoardInput(ctx context.Context) error {
 	if strings.StringIsEmpty(workspaceId) {
-		form, err := workspace.NewSelectWorkspaceForm(ctx, false, true)
+		form, err := workspace.NewSelectWorkspaceForm(ctx, false, false)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}
@@ -55,8 +62,8 @@ func parseUnarchiveWorkspaceInput(ctx context.Context) error {
 	return nil
 }
 
-func unarchiveWorkspace(cmd *cobra.Command) error {
-	msg, err := workspace.UnarchiveWorkspace(cmd.Context(), workspaceId)
+func archiveBoard(cmd *cobra.Command) error {
+	msg, err := workspace.ArchiveWorkspace(cmd.Context(), workspaceId)
 	if err != nil {
 		return err
 	}

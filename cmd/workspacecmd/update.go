@@ -1,4 +1,4 @@
-package workspace
+package workspacecmd
 
 import (
 	"github.com/eljamo/bajira/internal/command"
@@ -9,46 +9,41 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var UpdateWorkspaceCmd = &cobra.Command{
+var UpdateWorkspace = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.UpdateWorkspaceDescription,
 	SilenceUsage: true,
-	RunE:         runUpdateWorkspaceCmd,
+	RunE:         runUpdateBoard,
 }
 
 func init() {
-	UpdateWorkspaceCmd.Flags().StringVarP(
+	UpdateWorkspace.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
-		"",
+		flag.FlagI,
 		"",
 		strings.WorkspaceIdDescription,
 	)
-	UpdateWorkspaceCmd.Flags().StringVarP(
+	UpdateWorkspace.Flags().StringVarP(
 		&newWorkspaceId,
 		flag.FlagNewWorkspaceId,
-		"",
+		flag.FlagK,
 		"",
 		strings.NewWorkspaceIdDescription,
 	)
-	UpdateWorkspaceCmd.Flags().StringVarP(
+	UpdateWorkspace.Flags().StringVarP(
 		&newWorkspaceName,
 		flag.FlagNewWorkspaceName,
-		"",
+		flag.FlagN,
 		"",
 		strings.NewWorkspaceNameDescription,
 	)
 }
 
-// steps
-// once workspaceId is set, parse rest of the flags
-// if all are set, try to update the workspace with new values
-
-// if not prompt the user to enter new values
-
-func runUpdateWorkspaceCmd(cmd *cobra.Command, args []string) error {
+func runUpdateBoard(cmd *cobra.Command, args []string) error {
 	ctx := cmd.Context()
 
+	// set workspaceId if not set
 	if strings.StringIsEmpty(workspaceId) {
 		form, err := workspace.NewSelectWorkspaceForm(ctx, all, archived)
 		if err != nil {
@@ -63,6 +58,7 @@ func runUpdateWorkspaceCmd(cmd *cobra.Command, args []string) error {
 		workspaceId = workspace.WorkspaceId
 	}
 
+	// if newWorkspaceName is not set, get the current one from workspaceId
 	if strings.StringIsEmpty(newWorkspaceName) {
 		cfg, err := workspace.GetWorkspaceConfig(ctx, workspaceId)
 		if err != nil {
@@ -72,6 +68,7 @@ func runUpdateWorkspaceCmd(cmd *cobra.Command, args []string) error {
 		newWorkspaceName = cfg.Name
 	}
 
+	// if newWorkspaceId is not set or newWorkspaceName is not set, prompt the user to enter new values
 	if strings.StringIsEmpty(newWorkspaceId) || strings.StringIsEmpty(newWorkspaceName) {
 		form, err := workspace.NewUpdateWorkspaceForm(ctx, newWorkspaceId, newWorkspaceName)
 		if err != nil {

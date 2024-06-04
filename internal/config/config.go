@@ -15,7 +15,7 @@ import (
 	"golang.org/x/text/language"
 )
 
-type ConfigContextKey string
+type ContextConfigKey string
 
 type AssigneeConfig struct {
 	Default   DefaultAssigneeConfig
@@ -31,7 +31,7 @@ type WorkspaceAssigneeConfig struct {
 	WorkspaceID string `toml:"workspace_id"`
 }
 
-type ApplicationConfig struct {
+type BajiraConfig struct {
 	AccessibleMode     bool         `toml:"accessible_mode"`
 	CacheDirectory     string       `toml:"cache_directory"`
 	ConfigDirectory    string       `toml:"config_directory"`
@@ -41,7 +41,7 @@ type ApplicationConfig struct {
 	Assignee           AssigneeConfig
 }
 
-type ApplicationConfigFile struct {
+type BajiraConfigFile struct {
 	AccessibleMode     bool   `toml:"accessible_mode"`
 	DataDirectory      string `toml:"data_directory"`
 	DefaultWorkspaceId string `toml:"default_workspace_id"`
@@ -77,7 +77,7 @@ func validateDirectories(dataDir, configDir, cacheDir string) error {
 }
 
 // overwriteConfig overwrites the application config with the values from the config file.
-func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
+func overwriteConfig(cfg *BajiraConfig, cfgFile *BajiraConfigFile) {
 	if cfgFile.DataDirectory != "" {
 		cfg.DataDirectory = cfgFile.DataDirectory
 	}
@@ -102,8 +102,8 @@ func overwriteConfig(cfg *ApplicationConfig, cfgFile *ApplicationConfigFile) {
 	}
 }
 
-// getApplicationConfig gets the application config from the config file and sets the locale.
-func getApplicationConfig(getAppDirsFunc directory.GetApplicationDirectoriesFunc) (*ApplicationConfig, error) {
+// getBajiraConfig gets the application config from the config file and sets the locale.
+func getBajiraConfig(getAppDirsFunc directory.GetApplicationDirectoriesFunc) (*BajiraConfig, error) {
 	// guess locale
 	err := guessLocale()
 	if err != nil {
@@ -125,7 +125,7 @@ func getApplicationConfig(getAppDirsFunc directory.GetApplicationDirectoriesFunc
 		return nil, errorconc.LocalizedError(err, "failed to get current user")
 	}
 
-	cfg := &ApplicationConfig{
+	cfg := &BajiraConfig{
 		CacheDirectory:  cacheDir,
 		ConfigDirectory: configDir,
 		DataDirectory:   dataDir,
@@ -137,7 +137,7 @@ func getApplicationConfig(getAppDirsFunc directory.GetApplicationDirectoriesFunc
 		},
 	}
 
-	var cfgFile ApplicationConfigFile
+	var cfgFile BajiraConfigFile
 	err = toml.DecodeFromFile(filepath.Join(configDir, consts.BajiraFileNameConfig), &cfgFile)
 	if err != nil {
 		return nil, err
@@ -162,14 +162,14 @@ func getApplicationConfig(getAppDirsFunc directory.GetApplicationDirectoriesFunc
 	return cfg, nil
 }
 
-// GetApplicationConfig gets the application config from the config file and sets the locale.
-func GetApplicationConfig() (*ApplicationConfig, error) {
-	return getApplicationConfig(directory.GetApplicationDirectories)
+// GetBajiraConfig gets the application config from the config file and sets the locale.
+func GetBajiraConfig() (*BajiraConfig, error) {
+	return getBajiraConfig(directory.GetApplicationDirectories)
 }
 
 // GetConfigFromContext gets the application config from the context.
-func GetConfigFromContext(ctx context.Context) (*ApplicationConfig, error) {
-	cfg, ok := ctx.Value(ConfigContextKey(consts.Config)).(*ApplicationConfig)
+func GetConfigFromContext(ctx context.Context) (*BajiraConfig, error) {
+	cfg, ok := ctx.Value(ContextConfigKey(consts.BajiraContextKeyConfig)).(*BajiraConfig)
 	if !ok {
 		return nil, errorconc.LocalizedError(nil, "failed to get application config from context")
 	}

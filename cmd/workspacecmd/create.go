@@ -1,4 +1,4 @@
-package workspace
+package workspacecmd
 
 import (
 	"context"
@@ -11,22 +11,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var CreateWorkspaceCmd = &cobra.Command{
+var CreateWorkspace = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.CreateWorkspaceDescription,
 	SilenceUsage: true,
-	RunE:         createWorkspace,
+	RunE:         runCreateWorkspace,
 }
 
 func init() {
-	CreateWorkspaceCmd.Flags().StringVarP(
+	CreateWorkspace.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
-		flag.FlagK,
+		flag.FlagI,
 		"",
 		strings.WorkspaceIdDescription,
 	)
-	CreateWorkspaceCmd.Flags().StringVarP(
+	CreateWorkspace.Flags().StringVarP(
 		&workspaceName,
 		flag.FlagWorkspaceName,
 		flag.FlagN,
@@ -35,13 +35,13 @@ func init() {
 	)
 }
 
-func createWorkspace(cmd *cobra.Command, args []string) error {
+func runCreateWorkspace(cmd *cobra.Command, args []string) error {
 	err := parseCreateWorkspaceInput(cmd.Context())
 	if err != nil {
 		return err
 	}
 
-	return setupWorkspace(cmd)
+	return createWorkspace(cmd)
 }
 
 func parseCreateWorkspaceInput(ctx context.Context) error {
@@ -63,7 +63,7 @@ func parseCreateWorkspaceInput(ctx context.Context) error {
 	return nil
 }
 
-func setupWorkspace(cmd *cobra.Command) error {
+func createWorkspace(cmd *cobra.Command) error {
 	msg, err := workspace.CreateWorkspace(cmd.Context(), workspaceName, workspaceId)
 	if err != nil {
 		return err

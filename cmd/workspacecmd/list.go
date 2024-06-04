@@ -1,4 +1,4 @@
-package workspace
+package workspacecmd
 
 import (
 	"github.com/eljamo/bajira/internal/command"
@@ -21,7 +21,7 @@ func init() {
 }
 
 func listWorkspaces(cmd *cobra.Command, args []string) error {
-	table, err := workspace.GenerateWorkspaceList(cmd.Context(), all, archived)
+	table, err := workspace.ListWorkspaces(cmd.Context(), all, archived)
 	if err != nil {
 		return err
 	}

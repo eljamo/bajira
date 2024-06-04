@@ -1,4 +1,4 @@
-package workspace
+package workspacecmd
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var ArchiveWorkspaceCmd = &cobra.Command{
+var ArchiveWorkspace = &cobra.Command{
 	Use:          command.CommandWorkspace,
 	Short:        strings.ArchiveWorkspaceDescription,
 	SilenceUsage: true,
@@ -19,10 +19,10 @@ var ArchiveWorkspaceCmd = &cobra.Command{
 }
 
 func init() {
-	ArchiveWorkspaceCmd.Flags().StringVarP(
+	ArchiveWorkspace.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
-		flag.FlagK,
+		flag.FlagI,
 		"",
 		strings.WorkspaceIdDescription,
 	)

@@ -22,7 +22,7 @@ func NewCreateWorkspaceForm(ctx context.Context, workspaceId string, workspaceNa
 // createWorkspaceDirectory creates a workspace directory with the given name in the base path.
 // If the directory already exists, a directory with a name appended with a number will be created.
 func createWorkspaceDirectory(basePath, dirName string) (string, error) {
-	basePath = filepath.Join(basePath, consts.BajiraDirectoryNameWorkspace)
+	basePath = filepath.Join(basePath, consts.BajiraDirectoryNameWorkspaces)
 
 	err := directory.CreateAllDirectories(basePath)
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 )
 
 func DeleteWorkspace(ctx context.Context, workspaceId string) (string, error) {
-	path, err := getWorkspacePath(ctx, workspaceId)
+	path, err := GetWorkspacePath(ctx, workspaceId)
 	if err != nil {
 		return "", err
 	}

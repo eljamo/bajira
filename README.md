@@ -66,8 +66,8 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 ### Board Commands
 
-- [ ] bajira create board --workspace_id
-- [ ] bajira delete board --workspace_id --board_id
+- [x] bajira create board --workspace_id
+- [x] bajira delete board --workspace_id --board_id
 - [ ] bajira update board --workspace_id --board_id
 - [ ] bajira archive board --workspace_id --board_id
 - [ ] bajira unarchive board --workspace_id --board_id
@@ -103,10 +103,10 @@ I'll probably add support for these kinds of attributes on tasks
 - [x] bajira list workspaces
   - [x] bajira list workspaces --all
   - [x] bajira list workspaces --archived
-- [ ] bajira list boards
-  - [ ] bajira list boards --workspace_id
-  - [ ] bajira list boards --workspace_id --all
-  - [ ] bajira list boards --workspace_id --archived
+- [x] bajira list boards
+  - [x] bajira list boards --workspace_id
+  - [x] bajira list boards --workspace_id --all
+  - [x] bajira list boards --workspace_id --archived
 - [ ] bajira list tasks
   - [ ] bajira list tasks --workspace_id --board_id --assignee
   - [ ] bajira list tasks --workspace_id --board_id --self

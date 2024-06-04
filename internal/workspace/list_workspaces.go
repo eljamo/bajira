@@ -9,7 +9,7 @@ import (
 	bajiraTable "github.com/eljamo/bajira/internal/table"
 )
 
-func GenerateWorkspaceList(ctx context.Context, all bool, archived bool) (*table.Table, error) {
+func ListWorkspaces(ctx context.Context, all bool, archived bool) (*table.Table, error) {
 	workspaceListHeaders := []string{strings.IdUpper, strings.NameUpper, strings.PathUpper}
 
 	if all {

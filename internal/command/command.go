@@ -1,26 +1,14 @@
 package command
 
-import "github.com/eljamo/bajira/internal/consts"
-
 const (
-	CommandApplicationName string = consts.BajiraApplicationName
-	CommandArchive         string = "archive"
-	CommandBoard           string = "board"
-	CommandCreate          string = "create"
-	CommandDelete          string = "delete"
-	CommandKanban          string = "kanban"
-	CommandList            string = "list"
-	CommandRename          string = "rename"
-	CommandStart           string = "start"
-	CommandStop            string = "stop"
-	CommandSubtask         string = "subtask"
-	CommandTable           string = "table"
-	CommandTasks           string = "tasks"
-	CommandTask            string = "task"
-	CommandTemplate        string = "template"
-	CommandTime            string = "time"
-	CommandUnarchive       string = "unarchive"
-	CommandUpdate          string = "update"
-	CommandWorkspace       string = "workspace"
-	CommandWorkspaces      string = "workspaces"
+	CommandArchive    string = "archive"
+	CommandBoards     string = "boards"
+	CommandBoard      string = "board"
+	CommandCreate     string = "create"
+	CommandDelete     string = "delete"
+	CommandList       string = "list"
+	CommandUnarchive  string = "unarchive"
+	CommandUpdate     string = "update"
+	CommandWorkspaces string = "workspaces"
+	CommandWorkspace  string = "workspace"
 )

@@ -2,11 +2,11 @@ package consts
 
 const (
 	BajiraApplicationName             string = "bajira"
-	BajiraDirectoryNameWorkspace      string = "workspace"
-	BajiraDirectoryNameBoard          string = "board"
+	BajiraDirectoryNameWorkspaces     string = "workspaces"
+	BajiraDirectoryNameBoards         string = "boards"
 	BajiraFileNameConfig              string = "config.toml"
 	BajiraDefaultLanguage             string = "en"
 	BajiraPortableObjectDirectoryName string = "po"
 	BajiraPortableObjectFileName      string = "translations"
-	Config                            string = "config"
+	BajiraContextKeyConfig            string = "config"
 )

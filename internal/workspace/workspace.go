@@ -11,10 +11,12 @@ import (
 	"github.com/eljamo/bajira/internal/consts"
 	"github.com/eljamo/bajira/internal/directory"
 	"github.com/eljamo/bajira/internal/errorconc"
+	"github.com/eljamo/bajira/internal/flag"
 	"github.com/eljamo/bajira/internal/form"
 	"github.com/eljamo/bajira/internal/key"
 	bajiraStrings "github.com/eljamo/bajira/internal/strings"
 	"github.com/eljamo/bajira/internal/toml"
+	"github.com/spf13/cobra"
 )
 
 // WorkspaceConfig holds the configuration for a workspace.
@@ -59,21 +61,6 @@ func NewWorkspaceIdAndNameFormGroup(id, name string) *huh.Group {
 				return nil
 			}),
 	)
-}
-
-func generateWorkspaceListFormGroup(ctx context.Context, all bool, archived bool) (*huh.Group, error) {
-	workspaceIdsNamesPaths, err := getWorkspaces(ctx, all, archived)
-	if err != nil {
-		return nil, err
-	}
-
-	wkspaceMap := make(map[string]string, len(workspaceIdsNamesPaths))
-	for _, wkspace := range workspaceIdsNamesPaths {
-		key := fmt.Sprintf("%s - %s", wkspace[0], wkspace[1])
-		wkspaceMap[key] = wkspace[0]
-	}
-
-	return huh.NewGroup(form.NewSelect(bajiraStrings.SelectAWorkspace, wkspaceMap, &WorkspaceId)), nil
 }
 
 // getUsedWorkspaceIds returns a slice of all workspace ids in use.
@@ -187,11 +174,12 @@ func getWorkspaceData(dir string) (*WorkspaceConfig, error) {
 	return &wsConfig, nil
 }
 
-func getWorkspacePath(ctx context.Context, workspaceId string) (string, error) {
+func GetWorkspacePath(ctx context.Context, workspaceId string) (string, error) {
 	path, err := getWorkspaceDirectoryPath(ctx)
 	if err != nil {
 		return "", err
 	}
+
 	allDirs, err := directory.GetSubdirectoryPaths(path)
 	if err != nil {
 		return "", err
@@ -212,7 +200,7 @@ func getWorkspacePath(ctx context.Context, workspaceId string) (string, error) {
 }
 
 func GetWorkspaceConfig(ctx context.Context, workspaceId string) (*WorkspaceConfig, error) {
-	path, err := getWorkspacePath(ctx, workspaceId)
+	path, err := GetWorkspacePath(ctx, workspaceId)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +209,7 @@ func GetWorkspaceConfig(ctx context.Context, workspaceId string) (*WorkspaceConf
 }
 
 func updateWorkspaceConfig(ctx context.Context, workspaceId string, wsConfig *WorkspaceConfig) error {
-	path, err := getWorkspacePath(ctx, workspaceId)
+	path, err := GetWorkspacePath(ctx, workspaceId)
 	if err != nil {
 		return err
 	}
@@ -241,7 +229,22 @@ func getWorkspaceDirectoryPath(ctx context.Context) (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(cfg.DataDirectory, consts.BajiraDirectoryNameWorkspace), nil
+	return filepath.Join(cfg.DataDirectory, consts.BajiraDirectoryNameWorkspaces), nil
+}
+
+func generateWorkspaceListFormGroup(ctx context.Context, all bool, archived bool) (*huh.Group, error) {
+	workspaceIdsNamesPaths, err := getWorkspaces(ctx, all, archived)
+	if err != nil {
+		return nil, err
+	}
+
+	wkspaceMap := make(map[string]string, len(workspaceIdsNamesPaths))
+	for _, wkspace := range workspaceIdsNamesPaths {
+		key := fmt.Sprintf("%s - %s", wkspace[0], wkspace[1])
+		wkspaceMap[key] = wkspace[0]
+	}
+
+	return huh.NewGroup(form.NewSelect(bajiraStrings.SelectAWorkspace, wkspaceMap, &WorkspaceId)), nil
 }
 
 func NewSelectWorkspaceForm(ctx context.Context, all bool, archived bool) (*huh.Form, error) {
@@ -251,4 +254,21 @@ func NewSelectWorkspaceForm(ctx context.Context, all bool, archived bool) (*huh.
 	}
 
 	return form.New(ctx, group)
+}
+
+func GetWorkspaceId(cmd *cobra.Command) (string, error) {
+	flagVal := cmd.Flag(flag.FlagWorkspaceId)
+	workspaceId := flagVal.Value.String()
+	ctx := cmd.Context()
+
+	if bajiraStrings.StringIsEmpty(workspaceId) {
+		cfg, err := config.GetConfigFromContext(ctx)
+		if err != nil {
+			return "", err
+		}
+
+		workspaceId = cfg.DefaultWorkspaceId
+	}
+
+	return workspaceId, nil
 }

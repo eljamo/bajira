@@ -76,8 +76,8 @@ func TestValidateDirectories(t *testing.T) {
 func TestOverwriteConfig(t *testing.T) {
 	t.Parallel()
 
-	cfg := &ApplicationConfig{}
-	cfgFile := &ApplicationConfigFile{
+	cfg := &BajiraConfig{}
+	cfgFile := &BajiraConfigFile{
 		DataDirectory:      testDataDir,
 		DefaultWorkspaceId: "workspace123",
 		Locale:             "en-US",
@@ -117,7 +117,7 @@ func TestOverwriteConfig(t *testing.T) {
 func TestGetConfigFromContext(t *testing.T) {
 	t.Parallel()
 
-	cfg := &ApplicationConfig{
+	cfg := &BajiraConfig{
 		CacheDirectory:  testCacheDir,
 		ConfigDirectory: testConfigDir,
 		DataDirectory:   testDataDir,
@@ -130,7 +130,7 @@ func TestGetConfigFromContext(t *testing.T) {
 		AccessibleMode: true,
 	}
 
-	ctx := context.WithValue(context.Background(), ConfigContextKey(consts.Config), cfg)
+	ctx := context.WithValue(context.Background(), ContextConfigKey(consts.BajiraContextKeyConfig), cfg)
 
 	retrievedCfg, err := GetConfigFromContext(ctx)
 	if err != nil {
@@ -157,7 +157,7 @@ func TestGetConfigFromContext(t *testing.T) {
 	}
 }
 
-func TestGetApplicationConfig(t *testing.T) {
+func TestGetBajiraConfig(t *testing.T) {
 	t.Parallel()
 
 	// Set up test environment
@@ -202,7 +202,7 @@ func TestGetApplicationConfig(t *testing.T) {
 		return testDataDir, testConfigDir, testCacheDir, nil
 	}
 
-	cfg, err := getApplicationConfig(mockGetAppDirsFunc)
+	cfg, err := getBajiraConfig(mockGetAppDirsFunc)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}

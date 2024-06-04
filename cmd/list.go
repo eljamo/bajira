@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"github.com/eljamo/bajira/cmd/workspace"
+	"github.com/eljamo/bajira/cmd/boardcmd"
+	"github.com/eljamo/bajira/cmd/workspacecmd"
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/strings"
 	"github.com/spf13/cobra"
@@ -15,5 +16,6 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-	listCmd.AddCommand(workspace.ListWorkspacesCmd)
+	listCmd.AddCommand(workspacecmd.ListWorkspacesCmd)
+	listCmd.AddCommand(boardcmd.ListBoardsCmd)
 }

@@ -1,4 +1,4 @@
-package workspace
+package workspacecmd
 
 import (
 	"context"
@@ -11,37 +11,35 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var DeleteWorkspaceCmd = &cobra.Command{
+var UnarchiveWorkspace = &cobra.Command{
 	Use:          command.CommandWorkspace,
-	Short:        strings.DeleteWorkspaceDescription,
+	Short:        strings.UnarchiveWorkspaceDescription,
 	SilenceUsage: true,
-	RunE:         runDeleteWorkspaceCmd,
+	RunE:         runUnarchiveWorkspace,
 }
 
 func init() {
-	DeleteWorkspaceCmd.Flags().StringVarP(
+	UnarchiveWorkspace.Flags().StringVarP(
 		&workspaceId,
 		flag.FlagWorkspaceId,
-		flag.FlagK,
+		flag.FlagI,
 		"",
 		strings.WorkspaceIdDescription,
 	)
-	DeleteWorkspaceCmd.Flags().BoolVarP(&all, flag.FlagAll, flag.FlagA, false, strings.ListAllWorkspacesDescription)
-	DeleteWorkspaceCmd.Flags().BoolVarP(&archived, flag.FlagArchived, flag.FlagR, false, strings.ListArchivedWorkspacesDescription)
 }
 
-func runDeleteWorkspaceCmd(cmd *cobra.Command, args []string) error {
-	err := parseDeleteWorkspaceInput(cmd.Context())
+func runUnarchiveWorkspace(cmd *cobra.Command, args []string) error {
+	err := parseUnarchiveWorkspaceInput(cmd.Context())
 	if err != nil {
 		return err
 	}
 
-	return deleteWorkspace(cmd)
+	return unarchiveWorkspace(cmd)
 }
 
-func parseDeleteWorkspaceInput(ctx context.Context) error {
+func parseUnarchiveWorkspaceInput(ctx context.Context) error {
 	if strings.StringIsEmpty(workspaceId) {
-		form, err := workspace.NewSelectWorkspaceForm(ctx, all, archived)
+		form, err := workspace.NewSelectWorkspaceForm(ctx, false, true)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}
@@ -57,8 +55,8 @@ func parseDeleteWorkspaceInput(ctx context.Context) error {
 	return nil
 }
 
-func deleteWorkspace(cmd *cobra.Command) error {
-	msg, err := workspace.DeleteWorkspace(cmd.Context(), workspaceId)
+func unarchiveWorkspace(cmd *cobra.Command) error {
+	msg, err := workspace.UnarchiveWorkspace(cmd.Context(), workspaceId)
 	if err != nil {
 		return err
 	}
