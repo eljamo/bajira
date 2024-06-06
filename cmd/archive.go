@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/eljamo/bajira/cmd/boardcmd"
 	"github.com/eljamo/bajira/cmd/workspacecmd"
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/strings"
@@ -16,4 +17,5 @@ var archiveCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(archiveCmd)
 	archiveCmd.AddCommand(workspacecmd.ArchiveWorkspace)
+	archiveCmd.AddCommand(boardcmd.ArchiveBoard)
 }

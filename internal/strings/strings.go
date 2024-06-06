@@ -86,6 +86,8 @@ var (
 	BajiraApplicationDescription               = gotext.Get("A bug tracker, issue tracker, and project management tool")
 	BoardCreated                               = gotext.Get("Board created")
 	BoardDeleted                               = gotext.Get("Board deleted")
+	BoardArchived                              = gotext.Get("Board archived")
+	BoardUnarchived                            = gotext.Get("Board unarchived")
 	BoardIdDescription                         = gotext.Get("Id for the board")
 	BoardNameDescription                       = gotext.Get("Name of the board")
 	CreateBoardDescription                     = gotext.Get("Create a new board")

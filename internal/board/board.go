@@ -282,3 +282,27 @@ func NewSelectBoardForm(ctx context.Context, workspaceId string, all bool, archi
 
 	return form.New(ctx, group)
 }
+
+func updateBoardConfig(ctx context.Context, workspaceId string, boardId string, cfg *BoardConfig) error {
+	path, err := GetBoardPath(ctx, workspaceId, boardId)
+	if err != nil {
+		return err
+	}
+
+	configPath := filepath.Join(path, consts.BajiraFileNameConfig)
+	err = toml.EncodeToFile(cfg, configPath)
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to encode workspace config file")
+	}
+
+	return nil
+}
+
+func GetBoardConfig(ctx context.Context, workspaceId string, boardId string) (*BoardConfig, error) {
+	path, err := GetBoardPath(ctx, workspaceId, boardId)
+	if err != nil {
+		return nil, err
+	}
+
+	return getBoardData(path)
+}

@@ -34,8 +34,10 @@ func init() {
 		"",
 		strings.BoardIdDescription,
 	)
-	DeleteBoard.Flags().BoolVarP(&all, flag.FlagAll, flag.FlagA, false, strings.ListAllWorkspacesAndBoardsDescription)
-	DeleteBoard.Flags().BoolVarP(&archived, flag.FlagArchived, flag.FlagR, false, strings.ListArchivedWorkspacesAndBoardsDescription)
+	DeleteBoard.Flags().BoolVarP(&allWorkspaces, flag.FlagAllWorkspaces, flag.FlagW, false, strings.ListAllWorkspacesDescription)
+	DeleteBoard.Flags().BoolVarP(&archivedWorkspaces, flag.FlagArchivedWorkspaces, flag.FlagU, false, strings.ListArchivedWorkspacesDescription)
+	DeleteBoard.Flags().BoolVarP(&allBoards, flag.FlagAllBoards, flag.FlagA, false, strings.ListAllBoardsDescription)
+	DeleteBoard.Flags().BoolVarP(&archivedBoards, flag.FlagArchivedBoards, flag.FlagR, false, strings.ListArchivedBoardsDescription)
 }
 
 func runDeleteBoard(cmd *cobra.Command, args []string) error {
@@ -49,7 +51,7 @@ func runDeleteBoard(cmd *cobra.Command, args []string) error {
 
 func parseDeleteBoardInput(ctx context.Context) error {
 	if strings.StringIsEmpty(workspaceId) {
-		form, err := workspace.NewSelectWorkspaceForm(ctx, all, archived)
+		form, err := workspace.NewSelectWorkspaceForm(ctx, allWorkspaces, archivedWorkspaces)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}
@@ -63,7 +65,7 @@ func parseDeleteBoardInput(ctx context.Context) error {
 	}
 
 	if strings.StringIsEmpty(boardId) {
-		form, err := board.NewSelectBoardForm(ctx, workspaceId, all, archived)
+		form, err := board.NewSelectBoardForm(ctx, workspaceId, allBoards, archivedBoards)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}

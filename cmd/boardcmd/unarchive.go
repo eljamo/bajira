@@ -3,6 +3,7 @@ package boardcmd
 import (
 	"context"
 
+	"github.com/eljamo/bajira/internal/board"
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/errorconc"
 	"github.com/eljamo/bajira/internal/flag"
@@ -33,6 +34,10 @@ func init() {
 		"",
 		strings.BoardIdDescription,
 	)
+	UnarchiveBoard.Flags().BoolVarP(&allWorkspaces, flag.FlagAllWorkspaces, flag.FlagW, false, strings.ListAllWorkspacesDescription)
+	UnarchiveBoard.Flags().BoolVarP(&archivedWorkspaces, flag.FlagArchivedWorkspaces, flag.FlagU, false, strings.ListArchivedWorkspacesDescription)
+	UnarchiveBoard.Flags().BoolVarP(&allBoards, flag.FlagAllBoards, flag.FlagA, false, strings.ListAllBoardsDescription)
+	UnarchiveBoard.Flags().BoolVarP(&archivedBoards, flag.FlagArchivedBoards, flag.FlagR, false, strings.ListArchivedBoardsDescription)
 }
 
 func runUnarchiveWorkspace(cmd *cobra.Command, args []string) error {
@@ -46,7 +51,7 @@ func runUnarchiveWorkspace(cmd *cobra.Command, args []string) error {
 
 func parseUnarchiveWorkspaceInput(ctx context.Context) error {
 	if strings.StringIsEmpty(workspaceId) {
-		form, err := workspace.NewSelectWorkspaceForm(ctx, false, true)
+		form, err := workspace.NewSelectWorkspaceForm(ctx, allWorkspaces, archivedWorkspaces)
 		if err != nil {
 			return errorconc.LocalizedError(err, "failed to initialize form")
 		}
@@ -59,11 +64,25 @@ func parseUnarchiveWorkspaceInput(ctx context.Context) error {
 		workspaceId = workspace.WorkspaceId
 	}
 
+	if strings.StringIsEmpty(boardId) {
+		form, err := board.NewSelectBoardForm(ctx, workspaceId, allBoards, archivedBoards)
+		if err != nil {
+			return errorconc.LocalizedError(err, "failed to initialize form")
+		}
+
+		err = form.Run()
+		if err != nil {
+			return errorconc.LocalizedError(err, "failed to run form")
+		}
+
+		boardId = board.BoardId
+	}
+
 	return nil
 }
 
 func unarchiveWorkspace(cmd *cobra.Command) error {
-	msg, err := workspace.UnarchiveWorkspace(cmd.Context(), workspaceId)
+	msg, err := board.UnarchiveBoard(cmd.Context(), workspaceId, boardId)
 	if err != nil {
 		return err
 	}
