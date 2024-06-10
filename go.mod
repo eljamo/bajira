@@ -7,7 +7,7 @@ require (
 	github.com/charmbracelet/huh v0.4.2
 	github.com/charmbracelet/lipgloss v0.11.0
 	github.com/jeandeaual/go-locale v0.0.0-20240223122105-ce5225dcaa49
-	github.com/leonelquinteros/gotext v1.6.0
+	github.com/leonelquinteros/gotext v1.6.1
 	github.com/muesli/go-app-paths v0.2.2
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/text v0.15.0
