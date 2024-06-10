@@ -10,7 +10,7 @@ require (
 	github.com/leonelquinteros/gotext v1.6.0
 	github.com/muesli/go-app-paths v0.2.2
 	github.com/spf13/cobra v1.8.0
-	golang.org/x/text v0.15.0
+	golang.org/x/text v0.16.0
 )
 
 require (
