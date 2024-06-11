@@ -35,7 +35,7 @@ func init() {
 		strings.BoardIdDescription,
 	)
 	ArchiveBoard.Flags().BoolVarP(&allWorkspaces, flag.FlagAllWorkspaces, flag.FlagW, false, strings.ListAllWorkspacesDescription)
-	ArchiveBoard.Flags().BoolVarP(&archivedWorkspaces, flag.FlagArchivedWorkspaces, flag.FlagU, false, strings.ListArchivedWorkspacesDescription)
+	ArchiveBoard.Flags().BoolVarP(&archivedWorkspaces, flag.FlagArchivedWorkspaces, flag.FlagC, false, strings.ListArchivedWorkspacesDescription)
 	ArchiveBoard.Flags().BoolVarP(&allBoards, flag.FlagAllBoards, flag.FlagA, false, strings.ListAllBoardsDescription)
 	ArchiveBoard.Flags().BoolVarP(&archivedBoards, flag.FlagArchivedBoards, flag.FlagR, false, strings.ListArchivedBoardsDescription)
 }

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/eljamo/bajira/cmd/boardcmd"
 	"github.com/eljamo/bajira/cmd/workspacecmd"
 	"github.com/eljamo/bajira/internal/command"
 	"github.com/eljamo/bajira/internal/strings"
@@ -16,4 +17,5 @@ var updateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(updateCmd)
 	updateCmd.AddCommand(workspacecmd.UpdateWorkspace)
+	updateCmd.AddCommand(boardcmd.UpdateBoard)
 }
