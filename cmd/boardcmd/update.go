@@ -55,62 +55,94 @@ func init() {
 }
 
 func parseUpdateWorkspaceInput(ctx context.Context) error {
-	// set workspaceId if not set
-	if strings.StringIsEmpty(workspaceId) {
-		form, err := workspace.NewSelectWorkspaceForm(ctx, allWorkspaces, archivedWorkspaces)
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to initialize form")
-		}
-
-		err = form.Run()
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to run form")
-		}
-
-		workspaceId = workspace.WorkspaceId
+	if err := setWorkspaceId(ctx); err != nil {
+		return err
 	}
 
-	// set boardId if not set
-	if strings.StringIsEmpty(boardId) {
-		form, err := board.NewSelectBoardForm(ctx, workspaceId, allBoards, archivedBoards)
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to initialize form")
-		}
-
-		err = form.Run()
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to run form")
-		}
-
-		boardId = board.BoardId
+	if err := setBoardId(ctx); err != nil {
+		return err
 	}
 
-	// newBoardName is not set, get the current one from workspaceId and boardId
-	if strings.StringIsEmpty(newBoardName) {
-		cfg, err := board.GetBoardConfig(ctx, workspaceId, boardId)
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to get board config")
-		}
-
-		newBoardName = cfg.Name
+	if err := setNewBoardName(ctx); err != nil {
+		return err
 	}
 
-	// newBoardId is not set or newBoardName is not set, prompt the user to enter new values
-	if strings.StringIsEmpty(newBoardId) || strings.StringIsEmpty(newBoardName) {
-		form, err := board.NewUpdateBoardForm(ctx, newBoardId, newBoardName)
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to initialize form")
-		}
-
-		err = form.Run()
-		if err != nil {
-			return errorconc.LocalizedError(err, "failed to run form")
-		}
-
-		newBoardId = board.BoardId
-		newBoardName = board.BoardName
+	if err := setNewBoardIdAndName(ctx); err != nil {
+		return err
 	}
 
+	return nil
+}
+
+func setWorkspaceId(ctx context.Context) error {
+	if !strings.StringIsEmpty(workspaceId) {
+		return nil
+	}
+
+	form, err := workspace.NewSelectWorkspaceForm(ctx, allWorkspaces, archivedWorkspaces)
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to initialize form")
+	}
+
+	err = form.Run()
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to run form")
+	}
+
+	workspaceId = workspace.WorkspaceId
+	return nil
+}
+
+func setBoardId(ctx context.Context) error {
+	if !strings.StringIsEmpty(boardId) {
+		return nil
+	}
+
+	form, err := board.NewSelectBoardForm(ctx, workspaceId, allBoards, archivedBoards)
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to initialize form")
+	}
+
+	err = form.Run()
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to run form")
+	}
+
+	boardId = board.BoardId
+	return nil
+}
+
+func setNewBoardName(ctx context.Context) error {
+	if !strings.StringIsEmpty(newBoardName) {
+		return nil
+	}
+
+	cfg, err := board.GetBoardConfig(ctx, workspaceId, boardId)
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to get board config")
+	}
+
+	newBoardName = cfg.Name
+	return nil
+}
+
+func setNewBoardIdAndName(ctx context.Context) error {
+	if !strings.StringIsEmpty(newBoardId) && !strings.StringIsEmpty(newBoardName) {
+		return nil
+	}
+
+	form, err := board.NewUpdateBoardForm(ctx, newBoardId, newBoardName)
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to initialize form")
+	}
+
+	err = form.Run()
+	if err != nil {
+		return errorconc.LocalizedError(err, "failed to run form")
+	}
+
+	newBoardId = board.BoardId
+	newBoardName = board.BoardName
 	return nil
 }
 
