@@ -66,11 +66,11 @@ A bug tracker, issue tracker, and project management tool written in Go. You hav
 
 ### Board Commands
 
-- [x] bajira create board --workspace_id
+- [ ] bajira create board --workspace_id
 - [x] bajira delete board --workspace_id --board_id
 - [ ] bajira update board --workspace_id --board_id
-- [ ] bajira archive board --workspace_id --board_id
-- [ ] bajira unarchive board --workspace_id --board_id
+- [x] bajira archive board --workspace_id --board_id
+- [x] bajira unarchive board --workspace_id --board_id
 
 ### Task Commands
 

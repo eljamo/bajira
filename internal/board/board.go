@@ -34,7 +34,7 @@ func NewBoardIdAndNameFormGroup(id, name string) *huh.Group {
 	return huh.NewGroup(
 		huh.NewInput().
 			Title(bajiraStrings.IdUpper).
-			Description(bajiraStrings.WorkspaceIdDescription).
+			Description(bajiraStrings.BoardIdDescription).
 			Value(&BoardId).
 			Validate(func(str string) error {
 				if len(str) >= 1 && bajiraStrings.StringIsEmpty(str) {
@@ -52,47 +52,6 @@ func NewBoardIdAndNameFormGroup(id, name string) *huh.Group {
 				return nil
 			}),
 	)
-}
-
-const (
-	DefaultBoardStatusBacklog string = "backlog"
-	DefaultBoardStatusToDo    string = "todo"
-	DefaultBoardStatusInProg  string = "inprog"
-	DefaultBoardStatusDone    string = "done"
-	DefaultBoardStatusClosed  string = "closed"
-	DefaultBoardStatusInvalid string = "invalid"
-)
-
-func GetDefaultBoardStatusString(status string) (string, error) {
-	switch status {
-	case DefaultBoardStatusBacklog:
-		return bajiraStrings.BacklogUpper, nil
-	case DefaultBoardStatusToDo:
-		return bajiraStrings.ToDoUpper, nil
-	case DefaultBoardStatusInProg:
-		return bajiraStrings.InProgressUpper, nil
-	case DefaultBoardStatusDone:
-		return bajiraStrings.DoneUpper, nil
-	case DefaultBoardStatusClosed:
-		return bajiraStrings.ClosedUpper, nil
-	}
-
-	return bajiraStrings.InvalidUpper, errorconc.LocalizedError(nil, "invalid default board status", status)
-}
-
-var DefaultStatuses = []string{
-	DefaultBoardStatusBacklog,
-	DefaultBoardStatusToDo,
-	DefaultBoardStatusInProg,
-	DefaultBoardStatusDone,
-	DefaultBoardStatusClosed,
-	DefaultBoardStatusInvalid,
-}
-
-var DefaultKanbanStatuses = []string{
-	DefaultBoardStatusToDo,
-	DefaultBoardStatusInProg,
-	DefaultBoardStatusDone,
 }
 
 // BoardConfig holds the configuration for a workspace.
